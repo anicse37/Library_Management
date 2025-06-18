@@ -84,3 +84,7 @@ This project is created strictly for learning purposes.
 It may include hardcoded credentials, lacks validations, and isn't secure for production use.
 It will be gradually upgraded as the learning progresses.
 
+### If it is not working
+
+![image](https://i.imgflip.com/4t169s.jpg)
+It'll work
