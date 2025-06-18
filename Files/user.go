@@ -3,7 +3,6 @@ package library
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -15,9 +14,27 @@ func (db *Database) InsertUser(ctx context.Context, user User) {
 		user.Approved = false
 	}
 	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
-	query := fmt.Sprintf(`INSERT INTO user
-	VALUES (%v,%v,%v,%v,%v);`, user.Name, user.Id, user.Role, hashedPassword, user.Approved)
-	if _, err := db.DB.ExecContext(ctx, query); err != nil {
-		log.Fatalf("Error While Inserting: %v", err)
+
+	if _, err := db.DB.ExecContext(ctx, `INSERT INTO user
+	VALUES (?,?,?,?,?);`, user.Name, user.Id, user.Role, hashedPassword, user.Approved); err != nil {
+		fmt.Printf("Error While Inserting: %v\n", err)
 	}
+}
+
+func (db *Database) FindUser(ctx context.Context, name any, field string) User {
+	var find string
+	user := User{}
+	switch field {
+	case "id":
+		find = fmt.Sprintf(`SELECT * FROM user
+		WHERE %v = ?;`, field)
+	default:
+		fmt.Println("Invalid input")
+	}
+	res := db.DB.QueryRowContext(ctx, find, name)
+	err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
+	if err != nil {
+		fmt.Println("User Doesn't extst:")
+	}
+	return user
 }

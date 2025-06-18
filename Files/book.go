@@ -44,3 +44,22 @@ func (db *Database) GetBooksFromTable(ctx context.Context) ListBookJSON {
 	}
 	return books
 }
+func (db *Database) SearchBooks(ctx context.Context, keyword string) ListBookJSON {
+	books := ListBookJSON{}
+	book := BookJSON{}
+
+	query := `SELECT * FROM books WHERE name LIKE ? OR author LIKE ?;`
+	likePattern := "%" + keyword + "%"
+	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
+	if err != nil {
+		log.Printf("Error while searching: %v", err)
+		return books
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
+		books.Book = append(books.Book, book)
+	}
+	return books
+}

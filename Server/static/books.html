@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-bar input {
+            width: 300px;
+            padding: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .borrow-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .borrow-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Available Books</h1>
+
+        <div class="search-bar">
+            <form class="search-bar" method="GET" action="/books">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or author..."
+                    value="{{.Query}}">
+                <button type="submit">Search</button>
+            </form>
+
+        </div>
+
+        <table id="booksTable">
+            <tbody id="booksBody">
+                {{range .Book}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Author}}</td>
+                    <td>{{.Year}}</td>
+                    <td>{{.Description}}</td>
+                    <td>{{.Available}}</td>
+                    <td>
+                        <form method="POST" action="/borrow">
+                            <input type="hidden" name="id" value="{{.Id}}">
+                            <button type="submit" class="borrow-btn">Borrow</button>
+                        </form>
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+
+        </table>
+    </div>
+
+
+</body>
+
+</html>

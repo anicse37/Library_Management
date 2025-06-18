@@ -2,72 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - Library Management</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background-color: #e9ecef;
-    }
-
-    .register-container {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      width: 320px;
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-
-    input[type="text"], input[type="password"], select {
-      width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    button {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.6rem;
-      background-color: #28a745;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #218838;
-    }
-  </style>
+  <title>Register</title>
+  <link rel="stylesheet" href="static/styles.css">
 </head>
 <body>
-  <div class="register-container">
-    <h2>Register</h2>
-    <form method="POST" action="/register">
+  <div class="container">
+    <h1>Register</h1>
+    <form action="/register" method="POST" class="register-form">
+      <label for="id">ID:</label>
+      <input type="text" name="id" id="id" required>
+
       <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required>
+      <input type="text" name="username" id="username" required>
 
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+      <input type="password" name="password" id="password" required>
 
       <label for="role">Role:</label>
-      <select name="role" id="role">
+      <select name="role" id="role" required>
+        <option value="">--Select Role--</option>
         <option value="user">User</option>
         <option value="admin">Admin</option>
       </select>
