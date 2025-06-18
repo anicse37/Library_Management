@@ -3,6 +3,7 @@ package library
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,20 +22,20 @@ func (db *Database) InsertUser(ctx context.Context, user User) {
 	}
 }
 
-func (db *Database) FindUser(ctx context.Context, name any, field string) User {
-	var find string
+func (db *Database) GetUserByID(ctx context.Context, name string, field string) (User, error) {
 	user := User{}
 	switch field {
 	case "id":
-		find = fmt.Sprintf(`SELECT * FROM user
-		WHERE %v = ?;`, field)
+		find := fmt.Sprintf(`SELECT name, id, role, password, approved FROM user WHERE id = '%v';`, name)
+		res := db.DB.QueryRowContext(ctx, find)
+		err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
+		if err != nil {
+			log.Printf("Error scanning user from DB: %v\n", err)
+			return user, fmt.Errorf("user not found or DB error")
+		}
 	default:
 		fmt.Println("Invalid input")
+		return user, nil
 	}
-	res := db.DB.QueryRowContext(ctx, find, name)
-	err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
-	if err != nil {
-		fmt.Println("User Doesn't extst:")
-	}
-	return user
+	return user, nil
 }

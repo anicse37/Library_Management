@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"text/template"
 
@@ -12,66 +11,90 @@ import (
 
 func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodPost {
-			// Parse form and insert user
-			if err := r.ParseForm(); err != nil {
-				http.Error(w, "Invalid form submission", http.StatusBadRequest)
-				return
-			}
-			username := r.FormValue("username")
-			password := r.FormValue("password")
-			id := r.FormValue("id")
-			role := r.FormValue("role")
-
-			if username == "" || password == "" || id == "" || role == "" {
-				http.Error(w, "Missing form fields", http.StatusBadRequest)
-				return
-			}
-
-			db.InsertUser(ctx, library.User{
-				Id:       id,
-				Name:     username,
-				Password: password,
-				Role:     role,
-			})
-			http.Redirect(w, r, "/register", http.StatusSeeOther) // Redirect after successful POST
+		if r.Method != http.MethodPost {
+			RenderTemplate(w, "register.html", nil)
 			return
 		}
 
-		// For GET requests, just render the form
-		RenderTemplate(w, "register.html", nil)
+		r.ParseForm()
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		id := r.FormValue("id")
+		role := r.FormValue("role")
+
+		db.InsertUser(ctx, library.User{
+			Id:       id,
+			Name:     username,
+			Password: password,
+			Role:     role,
+		})
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "role",
+			Value:    role,
+			Path:     "/",
+			HttpOnly: true,
+		})
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "username",
+			Value:    username,
+			Path:     "/",
+			HttpOnly: true,
+		})
+
+		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}
 }
 func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method == http.MethodGet {
-			if err := r.ParseForm(); err != nil {
-				http.Error(w, "Invalid form submission", http.StatusBadRequest)
-				return
-			}
+		switch r.Method {
+		case http.MethodPost:
+			r.ParseForm()
 			id := r.FormValue("id")
 			password := r.FormValue("password")
 
-			if id == "" || password == "" {
-				http.Error(w, "Missing form fields", http.StatusBadRequest)
+			user, err := db.GetUserByID(ctx, id, "id")
+			if err != nil {
+				http.Error(w, "Invalid ID", http.StatusUnauthorized)
 				return
 			}
 
-			user := db.FindUser(ctx, library.User{
-				Id:       id,
-				Password: password,
-			}, "id")
-			err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
-			if err != nil {
-				fmt.Printf("Invalid Password or username: %v", err)
+			if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+				http.Error(w, "Invalid password", http.StatusUnauthorized)
+				http.Error(w, "Invalid password", http.StatusUnauthorized)
+				return
 			}
-			http.Redirect(w, r, "/login", http.StatusSeeOther)
-			return
-		}
 
-		RenderTemplate(w, "login.html", nil)
+			if !user.Approved {
+				http.Error(w, "Account not approved by admin", http.StatusForbidden)
+				return
+			}
+
+			// ✅ At this point, login is successful —> set cookies
+			http.SetCookie(w, &http.Cookie{
+				Name:     "username",
+				Value:    user.Name,
+				Path:     "/",
+				HttpOnly: true,
+			})
+
+			http.SetCookie(w, &http.Cookie{
+				Name:     "role",
+				Value:    user.Role,
+				Path:     "/",
+				HttpOnly: true,
+			})
+
+			// Redirect to books page
+			http.Redirect(w, r, "/books", http.StatusSeeOther)
+
+		default:
+			http.ServeFile(w, r, "Server/static/login.html")
+		}
 	}
 }
+
 func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
