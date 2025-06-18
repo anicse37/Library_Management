@@ -1,4 +1,4 @@
-package files
+package library
 
 import (
 	"database/sql"
@@ -12,7 +12,6 @@ func StartDB(dsn string) *sql.DB {
 	if err != nil {
 		log.Fatalf("Error Opening DB: %v\n", err)
 	}
-
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
 	db.SetConnMaxLifetime(60 * time.Minute)
