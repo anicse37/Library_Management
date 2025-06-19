@@ -1,89 +1,44 @@
-# 📚 Library Management System (Golang + MySQL + HTML/CSS/JS)
+# 📚 Library Management System (Go + MySQL)
 
 This is a basic **Library Management System** built using:
 
-- ⚙️ **Golang** (with `net/http` for server and `database/sql` for DB interaction)
-- 🐬 **MySQL** as the database
-- 🖥️ **HTML/CSS/JavaScript** for a simple frontend
+- Go (Golang) for backend
+- MySQL for database
+- HTML/CSS for frontend
+- Gorilla sessions for session management
+
+> ⚠️ This project is created **for learning purposes only**. It is not production-ready.
 
 ---
 
-## 🚀 Features
+## ✨ Features
 
-- Add new books via a form (name, author, description, year)
-- Store book entries in a MySQL database
-- Retrieve and display the book list dynamically
-- JSON API at `/books` for GET and POST operations
-
----
-
-## 📁 Project Structure
-
-project-root/
-│
-├── main.go # Server entry point
-├── Files/
-│ ├── db.go # DB initialization
-│ ├── books.go # DB logic: insert, display, create table
-│
-├── Statics/
-│ ├── index.html # UI for library system
-│ ├── script.js # JS to handle frontend logic
-│ ├── style.css # Basic styling
-│
-└── README.md # This file
+- User registration & login
+- Role-based access (User, Admin, Super Admin)
+- Book listing, searching, and borrowing
+- Admin approval for users
+- Session-based authentication
 
 ---
 
-## 🔧 Prerequisites
+## 🚀 Getting Started
 
-- Go 1.18 or higher
-- MySQL installed and running
-- A database named `library_db`
-- A MySQL user with access:  
+1. **Install:**
+   - Go (v1.18 or later)
+   - MySQL
 
-  Example credentials (you can change them):
+2. **Update DB credentials:**
+   Edit the `dns` constant in `main.go` with your own MySQL connection details.
 
-username: go_user
-password: S3cur3P@ssw0rd
+3. **Run the server:**
+   ```bash
+   go run main.go
+Access the app:
+Open http://localhost:5050/login in your browser.
 
----
-
-## 🛠️ Setup Instructions
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/your-username/library-system
-cd library-system
-```
-
-### 2. Set up the MySQL database
-Run the following commands in your MySQL terminal:
-```bash 
-CREATE DATABASE library_db;
-CREATE USER 'go_user'@'localhost' IDENTIFIED BY 'S3cur3P@ssw0rd';
-GRANT ALL PRIVILEGES ON library_db.* TO 'go_user'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### 3. Run the Go server
-
-go run main.go
-### 4. Open the browser
-Visit: http://localhost:8080
-
-You can now:
-
-Submit a new book using the form
-
-See all books in the table
-
-⚠️ Disclaimer
-This project is created strictly for learning purposes.
-It may include hardcoded credentials, lacks validations, and isn't secure for production use.
-It will be gradually upgraded as the learning progresses.
-
+🛑 Disclaimer
+This code is strictly for learning and demonstration purposes.
+It lacks production-level features such as input validation, security hardening, and error handling.
 ### If it is not working
 
 ![image](https://i.imgflip.com/4t169s.jpg)

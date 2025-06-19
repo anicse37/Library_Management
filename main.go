@@ -30,5 +30,5 @@ func main() {
 	router.HandleFunc("/admin/dashboard", server.RequireRole("admin", server.AdminDashboard(ctx, db)))
 	router.HandleFunc("/superadmin/dashboard", server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db)))
 
-	http.ListenAndServe(":8080", router)
+	http.ListenAndServe(":5050", router)
 }
