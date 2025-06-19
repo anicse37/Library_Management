@@ -28,19 +28,11 @@ func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 			Role:     role,
 		})
 
-		http.SetCookie(w, &http.Cookie{
-			Name:     "role",
-			Value:    role,
-			Path:     "/",
-			HttpOnly: true,
-		})
-
-		http.SetCookie(w, &http.Cookie{
-			Name:     "username",
-			Value:    username,
-			Path:     "/",
-			HttpOnly: true,
-		})
+		session, _ := Store.Get(r, "library-session")
+		session.Values["username"] = username
+		session.Values["role"] = role
+		session.Values["userid"] = id
+		session.Save(r, w)
 
 		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}
@@ -72,6 +64,7 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 
 			session, _ := Store.Get(r, "library-session")
 			session.Values["username"] = user.Name
+			session.Values["userid"] = user.Id
 			session.Values["role"] = user.Role
 			session.Values["password"] = user.Password
 			session.Save(r, w)
@@ -103,9 +96,11 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 				books = db.GetBooksFromTable(ctx)
 			}
 			role := "user"
-			if roleCookier, err := r.Cookie("role"); err == nil {
-				role = roleCookier.Value
+			session, _ := Store.Get(r, "library-session")
+			if rRole, ok := session.Values["role"].(string); ok {
+				role = rRole
 			}
+
 			data := struct {
 				Book  []library.BookJSON
 				Query string

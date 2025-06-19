@@ -33,14 +33,7 @@ func (db *Database) GetUserByID(ctx context.Context, name string, field string) 
 			log.Printf("Error scanning user from DB: %v\n", err)
 			return user, fmt.Errorf("user not found or DB error")
 		}
-	case "role":
-		find := fmt.Sprintf(`SELECT name, id, role, password, approved FROM user WHERE role = '%v';`, name)
-		res := db.DB.QueryRowContext(ctx, find)
-		err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
-		if err != nil {
-			log.Printf("Error scanning user from DB: %v\n", err)
-			return user, fmt.Errorf("user not found or DB error")
-		}
+
 	default:
 		fmt.Println("Invalid input")
 		return user, nil
