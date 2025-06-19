@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Books</title>
-    <link rel="stylesheet" href="/static/style.css">
     <style>
         .search-bar {
             margin-bottom: 20px;
@@ -49,6 +48,8 @@
             background-color: #218838;
         }
     </style>
+
+
 </head>
 
 <body>
@@ -66,7 +67,7 @@
 
         <table id="booksTable">
             <tbody id="booksBody">
-                {{range .Book}}
+                {{range .Book.Book}}
                 <tr>
                     <td>{{.Name}}</td>
                     <td>{{.Author}}</td>
@@ -74,7 +75,7 @@
                     <td>{{.Description}}</td>
                     <td>{{.Available}}</td>
 
-                    {{if eq .Role "user"}}
+                    {{if eq $.Role "user"}}
                     <td>
                         <form method="POST" action="/borrow">
                             <input type="hidden" name="id" value="{{.Id}}">
@@ -83,14 +84,20 @@
                     </td>
                     {{end}}
 
+                    {{if eq $.Role "admin"}}
+                    <td>
+                        <form method="POST" action="/remove">
+                            <input type=name="id" value="{{.Id}}">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                    </td>
+                    {{end}}
                 </tr>
                 {{end}}
             </tbody>
 
         </table>
     </div>
-
-
 </body>
 
 </html>

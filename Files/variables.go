@@ -16,15 +16,15 @@ type Database struct {
 	DB    *sql.DB
 }
 type ListBookJSON struct {
-	Book []BookJSON `json:"book"`
+	Book []BookJSON
 }
 type BookJSON struct {
-	Id          int    `json:"id"`
-	Name        string `json:"name"`
-	Author      string `json:"author"`
-	Year        int    `json:"year"`
-	Description string `json:"description"`
-	Available   int    `json:"available"`
+	Id          int
+	Name        string
+	Author      string
+	Year        int
+	Description string
+	Available   int
 }
 type Book struct {
 	Name        string
@@ -39,11 +39,3 @@ type User struct {
 	Role     string
 	Approved bool
 }
-
-const (
-	ColunmTypeINT          = "INT"
-	ColunmTypeVARCHAR      = "VARCHAR(255)"
-	ColunmTypeBOOLEAN      = "BOOLEAN"
-	ColunmTypeBOOLEANTrue  = "BOOLEAN DEFAULT TRUE"
-	ColunmTypeBOOLEANFalse = "BOOLEAN DEFAULT FALSE"
-)

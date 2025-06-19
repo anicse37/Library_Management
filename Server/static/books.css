@@ -1,0 +1,42 @@
+ .search-bar {
+     margin-bottom: 20px;
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+
+ .search-bar input {
+     width: 300px;
+     padding: 8px;
+ }
+
+ table {
+     width: 100%;
+     border-collapse: collapse;
+     margin-top: 1rem;
+ }
+
+ table,
+ th,
+ td {
+     border: 1px solid #ccc;
+ }
+
+ th,
+ td {
+     padding: 10px;
+     text-align: left;
+ }
+
+ .borrow-btn {
+     background-color: #28a745;
+     color: white;
+     border: none;
+     padding: 6px 10px;
+     border-radius: 4px;
+     cursor: pointer;
+ }
+
+ .borrow-btn:hover {
+     background-color: #218838;
+ }

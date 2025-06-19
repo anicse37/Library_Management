@@ -26,9 +26,11 @@ func main() {
 	router := http.NewServeMux()
 	router.HandleFunc("/register", server.RegisterHandler(ctx, db))
 	router.HandleFunc("/login", server.LoginHandler(ctx, db))
-	router.HandleFunc("/books", server.BooksHandle(ctx, db))
-	router.HandleFunc("/admin/dashboard", server.RequireRole("admin", server.AdminDashboard(ctx, db)))
-	router.HandleFunc("/superadmin/dashboard", server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db)))
+	router.HandleFunc("/logout", server.LogoutHandler())
+	router.HandleFunc("/books", server.RequireLogin(server.BooksHandle(ctx, db)))
+
+	router.HandleFunc("/admin/dashboard", server.RequireLogin(server.RequireRole("admin", server.AdminDashboard(ctx, db))))
+	router.HandleFunc("/superadmin/dashboard", server.RequireLogin(server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db))))
 
 	http.ListenAndServe(":5050", router)
 }

@@ -101,11 +101,11 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 			}
 
 			data := struct {
-				Book  []library.BookJSON
+				Book  library.ListBookJSON
 				Query string
 				Role  string
 			}{
-				Book:  books.Book,
+				Book:  books,
 				Query: search,
 				Role:  role,
 			}
