@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"net/http"
-	"text/template"
 
 	library "github.com/anicse37/Library_Management/Files"
 	"golang.org/x/crypto/bcrypt"
@@ -71,23 +70,20 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 				return
 			}
 
-			// ✅ At this point, login is successful —> set cookies
-			http.SetCookie(w, &http.Cookie{
-				Name:     "username",
-				Value:    user.Name,
-				Path:     "/",
-				HttpOnly: true,
-			})
+			session, _ := Store.Get(r, "library-session")
+			session.Values["username"] = user.Name
+			session.Values["role"] = user.Role
+			session.Values["password"] = user.Password
+			session.Save(r, w)
 
-			http.SetCookie(w, &http.Cookie{
-				Name:     "role",
-				Value:    user.Role,
-				Path:     "/",
-				HttpOnly: true,
-			})
-
-			// Redirect to books page
-			http.Redirect(w, r, "/books", http.StatusSeeOther)
+			switch user.Role {
+			case "admin":
+				http.Redirect(w, r, "admin/dashboard", http.StatusSeeOther)
+			case "superadmin":
+				http.Redirect(w, r, "superadmin/dashboard", http.StatusSeeOther)
+			default:
+				http.Redirect(w, r, "books", http.StatusSeeOther)
+			}
 
 		default:
 			http.ServeFile(w, r, "Server/static/login.html")
@@ -106,13 +102,18 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 			} else {
 				books = db.GetBooksFromTable(ctx)
 			}
-
+			role := "user"
+			if roleCookier, err := r.Cookie("role"); err == nil {
+				role = roleCookier.Value
+			}
 			data := struct {
 				Book  []library.BookJSON
 				Query string
+				Role  string
 			}{
 				Book:  books.Book,
 				Query: search,
+				Role:  role,
 			}
 			RenderTemplate(w, "books.html", data)
 		default:
@@ -120,15 +121,12 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 		}
 	}
 }
+func LogoutHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		session, _ := Store.Get(r, "library-session")
+		session.Options.MaxAge = -1
+		session.Save(r, w)
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
-	t, err := template.ParseFiles("Server/static/" + tmpl)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = t.Execute(w, data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }

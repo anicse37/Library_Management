@@ -73,12 +73,16 @@
                     <td>{{.Year}}</td>
                     <td>{{.Description}}</td>
                     <td>{{.Available}}</td>
+
+                    {{if eq .Role "user"}}
                     <td>
                         <form method="POST" action="/borrow">
                             <input type="hidden" name="id" value="{{.Id}}">
                             <button type="submit" class="borrow-btn">Borrow</button>
                         </form>
                     </td>
+                    {{end}}
+
                 </tr>
                 {{end}}
             </tbody>
