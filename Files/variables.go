@@ -39,3 +39,6 @@ type User struct {
 	Role     string
 	Approved bool
 }
+type ListUser struct {
+	Users []User
+}

@@ -1,0 +1,65 @@
+/* Table Styles */
+#usersTable {
+    width: 90%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#usersTable td, #usersTable th {
+    padding: 12px 16px;
+    border: 1px solid #ddd;
+    text-align: left;
+    vertical-align: middle;
+}
+
+#usersTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#usersTable tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Button Styles */
+button.approve-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.approve-btn:hover {
+    background-color: #45a049;
+}
+
+button.remove-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.remove-btn:hover {
+    background-color: #d32f2f;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #usersTable td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    #usersTable tr {
+        margin-bottom: 15px;
+        display: block;
+    }
+}

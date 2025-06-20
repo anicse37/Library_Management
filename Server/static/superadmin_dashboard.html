@@ -3,35 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Super Admin Dashboard</title>
-  <link rel="stylesheet" href="/static/style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 2rem;
-      background-color: #f4f4f4;
-    }
-    .container {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    h1 {
-      margin-bottom: 1rem;
-    }
-    .actions a {
-      display: inline-block;
-      margin: 0.5rem 1rem 0.5rem 0;
-      padding: 0.5rem 1rem;
-      background-color: #28a745;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .actions a:hover {
-      background-color: #1e7e34;
-    }
-  </style>
+  <link rel="stylesheet" href="Server/static/css/superadmin.css">
+  
 </head>
 <body>
   <div class="container">
@@ -39,7 +12,7 @@
     <p>Welcome, Super Admin! You can perform the following high-level actions:</p>
     <div class="actions">
       <a href="/books">Manage All Books</a>
-      <a href="/admins">Manage Admins</a>
+      <a href="/approve-users">Manage Admins</a>
       <a href="/users">View All Users</a>
       <a href="/logout">Logout</a>
     </div>

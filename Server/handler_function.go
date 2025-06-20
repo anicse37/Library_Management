@@ -34,7 +34,7 @@ func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 		session.Values["userid"] = id
 		session.Save(r, w)
 
-		http.Redirect(w, r, "/books", http.StatusSeeOther)
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 	}
 }
 func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {

@@ -74,3 +74,31 @@ func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
 		next(w, r)
 	}
 }
+func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		session, _ := Store.Get(r, "library-session")
+
+		userID, ok := session.Values["userid"].(string)
+		userRole, ok2 := session.Values["role"].(string)
+
+		if !ok || !ok2 || userID == "" || userRole != "superadmin" {
+			http.Error(w, "Unauthorized access", http.StatusUnauthorized)
+			return
+		}
+
+		switch r.Method {
+		case http.MethodGet:
+			user := library.GetApprovalUsers(ctx, db)
+			data := struct {
+				User library.ListUser
+			}{
+				User: user,
+			}
+			RenderTemplate(w, "approve-user.html", data)
+		default:
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		}
+
+	}
+}

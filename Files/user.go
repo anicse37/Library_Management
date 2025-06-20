@@ -21,6 +21,16 @@ func (db *Database) InsertUser(ctx context.Context, user User) {
 		fmt.Printf("Error While Inserting: %v\n", err)
 	}
 }
+func (db *Database) InsertSuperAdmin(ctx context.Context, user User) {
+	_, err := db.GetUserByID(ctx, user.Id, "id")
+	if err != nil {
+		hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		if _, err := db.DB.ExecContext(ctx, `INSERT INTO user
+	VALUES (?,?,?,?,?);`, user.Name, user.Id, user.Role, hashedPassword, user.Approved); err != nil {
+			fmt.Printf("Error While Inserting: %v\n", err)
+		}
+	}
+}
 
 func (db *Database) GetUserByID(ctx context.Context, name string, field string) (User, error) {
 	user := User{}
@@ -39,4 +49,20 @@ func (db *Database) GetUserByID(ctx context.Context, name string, field string) 
 		return user, nil
 	}
 	return user, nil
+}
+func GetApprovalUsers(ctx context.Context, db Database) ListUser {
+	users := ListUser{}
+	user := User{}
+	pendingApproval, err := db.DB.Query(`SELECT * FROM user WHERE approved = FALSE`)
+	if err != nil {
+		log.Println("Error querying DB:", err)
+		return users
+	}
+	defer pendingApproval.Close()
+
+	for pendingApproval.Next() {
+		pendingApproval.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
+		users.Users = append(users.Users, user)
+	}
+	return users
 }
