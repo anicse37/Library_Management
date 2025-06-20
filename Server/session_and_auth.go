@@ -2,11 +2,13 @@ package server
 
 import (
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/gorilla/sessions"
 )
 
-var Store = sessions.NewCookieStore([]byte("very-secret-key"))
+var Store = sessions.NewCookieStore([]byte(strconv.FormatInt(time.Now().UnixNano(), 10)))
 
 func init() {
 	Store.Options = &sessions.Options{
@@ -19,7 +21,7 @@ func init() {
 }
 func RequireLogin(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 		_, userOk := session.Values["userid"]
 		_, roleOk := session.Values["role"]
 

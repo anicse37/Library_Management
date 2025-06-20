@@ -9,7 +9,7 @@ import (
 
 func AdminDashboard(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 
 		userID, ok := session.Values["userid"].(string)
 		userRole, ok2 := session.Values["role"].(string)

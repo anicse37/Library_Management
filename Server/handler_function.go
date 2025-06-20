@@ -28,7 +28,7 @@ func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 			Role:     role,
 		})
 
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 		session.Values["username"] = username
 		session.Values["role"] = role
 		session.Values["userid"] = id
@@ -61,7 +61,7 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 				return
 			}
 
-			session, _ := Store.Get(r, "library-session")
+			session, _ := Store.Get(r, "very-secret-key")
 			session.Values["username"] = user.Name
 			session.Values["userid"] = user.Id
 			session.Values["role"] = user.Role
@@ -95,7 +95,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 				books = db.GetBooksFromTable(ctx)
 			}
 			role := "user"
-			session, _ := Store.Get(r, "library-session")
+			session, _ := Store.Get(r, "very-secret-key")
 			if rRole, ok := session.Values["role"].(string); ok {
 				role = rRole
 			}
@@ -118,7 +118,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 
 func LogoutHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 		session.Options.MaxAge = -1
 		session.Save(r, w)
 

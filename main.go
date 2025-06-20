@@ -38,11 +38,12 @@ func main() {
 	router.HandleFunc("/register", server.RegisterHandler(ctx, db))
 	router.HandleFunc("/login", server.LoginHandler(ctx, db))
 	router.HandleFunc("/logout", server.LogoutHandler())
+
 	router.HandleFunc("/books", server.RequireLogin(server.BooksHandle(ctx, db)))
+	router.HandleFunc("/all-users", server.RequireLogin(server.AllUsersHandler(ctx, db)))
 
 	router.HandleFunc("/admin/dashboard", server.RequireLogin(server.RequireRole("admin", server.AdminDashboard(ctx, db))))
 	router.HandleFunc("/superadmin/dashboard", server.RequireLogin(server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db))))
-	router.HandleFunc("/all-users", server.RequireLogin(server.AllUsersHandler(ctx, db)))
 	router.HandleFunc("/approve-users", server.RequireLogin(server.RequireRole("superadmin", server.ApproveUsers(ctx, db))))
 
 	http.ListenAndServe(":5050", router)

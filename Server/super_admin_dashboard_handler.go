@@ -23,7 +23,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 
 func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 
 		userID, ok := session.Values["userid"].(string)
 		userRole, ok2 := session.Values["role"].(string)
@@ -44,7 +44,7 @@ func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerF
 }
 func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 		if rRole, ok := session.Values["role"].(string); !ok || rRole != role {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -55,7 +55,7 @@ func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
 func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		session, _ := Store.Get(r, "library-session")
+		session, _ := Store.Get(r, "very-secret-key")
 
 		userID, ok := session.Values["userid"].(string)
 		userRole, ok2 := session.Values["role"].(string)
