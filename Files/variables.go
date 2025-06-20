@@ -7,7 +7,7 @@ import (
 
 type Library interface {
 	GetBooksFromTable(ctx context.Context)
-	InsertInTable(ctx context.Context, book ListBookJSON)
+	InsertBooksInTable(ctx context.Context, book ListBookJSON)
 	InsertUser(ctx context.Context, user User)
 	Display(name string)
 }

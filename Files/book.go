@@ -6,13 +6,6 @@ import (
 	"log"
 )
 
-func (db *Database) InsertInTable(ctx context.Context, book Book) {
-	if _, err := db.DB.ExecContext(ctx, `INSERT INTO books (name, author, description,year)
-	VALUES (?,?,?,?);`, book.Name, book.Author, book.Description, book.Year); err != nil {
-		log.Fatalf("Error While Inserting: %v", err)
-	}
-}
-
 func (db *Database) FindInTable(ctx context.Context, name any, field string) BookJSON {
 	var find string
 	book := BookJSON{}
@@ -29,6 +22,12 @@ func (db *Database) FindInTable(ctx context.Context, name any, field string) Boo
 		fmt.Println("Book Doesn't extst:")
 	}
 	return book
+}
+func (db *Database) InsertBooksInTable(ctx context.Context, book Book) {
+	if _, err := db.DB.ExecContext(ctx, `INSERT INTO books (name, author, description,year)
+	VALUES (?,?,?,?);`, book.Name, book.Author, book.Description, book.Year); err != nil {
+		log.Fatalf("Error While Inserting: %v", err)
+	}
 }
 
 func (db *Database) GetBooksFromTable(ctx context.Context) ListBookJSON {

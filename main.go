@@ -21,6 +21,7 @@ func main() {
 	db.DB = library.StartDB(dns)
 	defer db.DB.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+
 	defer cancel()
 	db.InsertSuperAdmin(ctx, library.User{
 		Id:       "MAU21UCS014",
@@ -41,6 +42,7 @@ func main() {
 
 	router.HandleFunc("/admin/dashboard", server.RequireLogin(server.RequireRole("admin", server.AdminDashboard(ctx, db))))
 	router.HandleFunc("/superadmin/dashboard", server.RequireLogin(server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db))))
+	router.HandleFunc("/all-users", server.RequireLogin(server.AllUsersHandler(ctx, db)))
 	router.HandleFunc("/approve-users", server.RequireLogin(server.RequireRole("superadmin", server.ApproveUsers(ctx, db))))
 
 	http.ListenAndServe(":5050", router)

@@ -115,6 +115,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 		}
 	}
 }
+
 func LogoutHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		session, _ := Store.Get(r, "library-session")

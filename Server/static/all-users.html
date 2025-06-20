@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>All Users</title>
+    <link rel="stylesheet" href="/Server/static/css/all-users.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>All Registered Users</h1>
+
+        <div class="search-bar">
+            <form class="search-bar" method="GET" action="/users">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or email..."
+                    value="{{.Query}}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <table id="usersTable">
+            <tbody id="usersBody">
+                <tr>
+                    <td>Name</td>
+                    <td>ID</td>
+                    <td>Role</td>
+                </tr>
+
+                {{range $.Users.Users}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Id}}</td>
+                    <td>{{.Role}}</td>
+                    <td></td>
+
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

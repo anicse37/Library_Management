@@ -66,3 +66,38 @@ func GetApprovalUsers(ctx context.Context, db Database) ListUser {
 	}
 	return users
 }
+
+func GetAllUser(ctx context.Context, db Database) (ListUser, error) {
+	users := ListUser{}
+	user := User{}
+	res, err := db.DB.Query(`SELECT * FROM user WHERE 	role = 'user'`)
+	if err != nil {
+		log.Printf("Error While Loading All Users: %v", err)
+		return users, err
+	}
+	defer res.Close()
+
+	for res.Next() {
+		res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
+		users.Users = append(users.Users, user)
+	}
+	return users, nil
+}
+func (db *Database) SearchUsers(ctx context.Context, keyword string) ListUser {
+	users := ListUser{}
+	user := User{}
+	query := `SELECT * FROM user WHERE name LIKE ? OR id LIKE ?;`
+	likePattern := "%" + keyword + "%"
+	res, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
+	if err != nil {
+		log.Printf("Error while searching: %v", err)
+		return users
+	}
+	defer res.Close()
+
+	for res.Next() {
+		res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
+		users.Users = append(users.Users, user)
+	}
+	return users
+}
