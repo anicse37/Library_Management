@@ -1,41 +1,43 @@
-package server
+package dashboard
 
 import (
 	"context"
 	"net/http"
 
 	library "github.com/anicse37/Library_Management/Files"
+	server "github.com/anicse37/Library_Management/Server"
+	session "github.com/anicse37/Library_Management/Server/Session"
 )
 
 func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "very-secret-key")
+		session, _ := session.Store.Get(r, "very-secret-key")
 
-		userID, ok := session.Values["userid"].(string)
-		userRole, ok2 := session.Values["role"].(string)
+		userID, ok := session.Values[library.SessionKeyUserId].(string)
+		userRole, ok2 := session.Values[library.SessionKeyRole].(string)
 
 		if !ok || !ok2 || userID == "" || userRole != "superadmin" {
 			http.Error(w, "Unauthorized access", http.StatusUnauthorized)
 			return
 		}
 
-		user, err := db.GetUserByID(ctx, userID, "id")
+		user, err := db.GetUserByID(ctx, userID, library.SessionKeyUserId)
 		if err != nil || !user.Approved || user.Role != "superadmin" {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 
-		RenderTemplate(w, "superadmin_dashboard.html", nil)
+		server.RenderTemplate(w, "superadmin_dashboard.html", nil)
 	}
 }
 
 func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		session, _ := Store.Get(r, "very-secret-key")
+		session, _ := session.Store.Get(r, "very-secret-key")
 
-		userID, ok := session.Values["userid"].(string)
-		userRole, ok2 := session.Values["role"].(string)
+		userID, ok := session.Values[library.SessionKeyUserId].(string)
+		userRole, ok2 := session.Values[library.SessionKeyRole].(string)
 
 		if !ok || !ok2 || userID == "" || userRole != "superadmin" {
 			http.Error(w, "Unauthorized access", http.StatusUnauthorized)
@@ -50,7 +52,7 @@ func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
 			}{
 				User: user,
 			}
-			RenderTemplate(w, "approve-user.html", data)
+			server.RenderTemplate(w, "approve-user.html", data)
 		default:
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}

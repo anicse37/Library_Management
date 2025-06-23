@@ -7,7 +7,10 @@ import (
 
 	library "github.com/anicse37/Library_Management/Files"
 	server "github.com/anicse37/Library_Management/Server"
-	_ "github.com/go-sql-driver/mysql" // <-- THIS is the fix
+	books "github.com/anicse37/Library_Management/Server/Books"
+	dashboard "github.com/anicse37/Library_Management/Server/Dashboard"
+	authentication "github.com/anicse37/Library_Management/Server/Login_Register"
+	handler "github.com/anicse37/Library_Management/Server/User_Admin_Handler"
 )
 
 func Router(dns string, SuperAdmin library.User) {
@@ -23,19 +26,19 @@ func Router(dns string, SuperAdmin library.User) {
 	fs := http.FileServer(http.Dir("Server/static/css"))
 	router.Handle("/Server/static/css/", http.StripPrefix("/Server/static/css/", fs))
 
-	router.HandleFunc("/register", server.RegisterHandler(ctx, db))
-	router.HandleFunc("/login", server.LoginHandler(ctx, db))
-	router.HandleFunc("/logout", server.LogoutHandler())
+	router.HandleFunc("/register", authentication.RegisterHandler(ctx, db))
+	router.HandleFunc("/login", authentication.LoginHandler(ctx, db))
+	router.HandleFunc("/logout", authentication.LogoutHandler())
 
-	router.HandleFunc("/home", server.RequireLogin(server.Home(ctx, db)))
+	router.HandleFunc("/home", handler.RequireLogin(server.Home(ctx, db)))
 
-	router.HandleFunc("/books", server.RequireLogin(server.BooksHandle(ctx, db)))
-	router.HandleFunc("/all-users", server.RequireLogin(server.AllUsersHandler(ctx, db)))
-	router.HandleFunc("/all-admins", server.RequireLogin(server.AllAdminsHandler(ctx, db)))
+	router.HandleFunc("/books", handler.RequireLogin(books.BooksHandle(ctx, db)))
+	router.HandleFunc("/all-users", handler.RequireLogin(handler.AllUsersHandler(ctx, db)))
+	router.HandleFunc("/all-admins", handler.RequireLogin(handler.AllAdminsHandler(ctx, db)))
 
-	router.HandleFunc("/admin/dashboard", server.RequireLogin(server.RequireRole("admin", server.AdminDashboard(ctx, db))))
-	router.HandleFunc("/superadmin/dashboard", server.RequireLogin(server.RequireRole("superadmin", server.SuperAdminDashboard(ctx, db))))
-	router.HandleFunc("/approve-users", server.RequireLogin(server.RequireRole("superadmin", server.ApproveUsers(ctx, db))))
+	router.HandleFunc("/admin/dashboard", handler.RequireLogin(handler.RequireRole("admin", dashboard.AdminDashboard(ctx, db))))
+	router.HandleFunc("/superadmin/dashboard", handler.RequireLogin(handler.RequireRole("superadmin", dashboard.SuperAdminDashboard(ctx, db))))
+	router.HandleFunc("/approve-users", handler.RequireLogin(handler.RequireRole("superadmin", dashboard.ApproveUsers(ctx, db))))
 
 	http.ListenAndServe(":5050", router)
 }

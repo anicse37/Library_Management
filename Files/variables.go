@@ -6,7 +6,7 @@ import (
 )
 
 type Library interface {
-	GetBooksFromTable(ctx context.Context)
+	GetAllBooks(ctx context.Context)
 	InsertBooksInTable(ctx context.Context, book ListBookJSON)
 	InsertUser(ctx context.Context, user User)
 	Display(name string)
@@ -42,3 +42,10 @@ type User struct {
 type ListUser struct {
 	Users []User
 }
+
+const (
+	SessionKeyUsername = "username"
+	SessionKeyUserId   = "userid"
+	SessionKeyRole     = "role"
+	SessionKeyPassword = "password"
+)
