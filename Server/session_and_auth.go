@@ -13,10 +13,10 @@ var Store = sessions.NewCookieStore([]byte(strconv.FormatInt(time.Now().UnixNano
 func init() {
 	Store.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   1800, // 30 minutes
+		MaxAge:   1800,
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
-		Secure:   false, // set to true if using HTTPS
+		Secure:   false,
 	}
 }
 func RequireLogin(next http.HandlerFunc) http.HandlerFunc {
@@ -27,6 +27,16 @@ func RequireLogin(next http.HandlerFunc) http.HandlerFunc {
 
 		if !userOk || !roleOk {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
+		}
+		next(w, r)
+	}
+}
+func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		session, _ := Store.Get(r, "very-secret-key")
+		if rRole, ok := session.Values["role"].(string); !ok || rRole != role {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
 		}
 		next(w, r)
 	}

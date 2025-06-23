@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="/Server/static/css/home_user.css">
+</head>
+<body>
+  <div class="card">
+    <h1>Welcome, {{.User.Name}}!</h1>
+    <p>Your ID: {{.User.Id}}<br>
+       Role: {{.User.Role}}</p>
+
+    <div class="buttons">
+      <a href="/books" class="btn">📚 View All Books</a>
+      <a href="/your-books" class="btn">📖 Your Borrowed Books</a>
+      <a href="/logout" class="btn logout">🔓 Logout</a>
+    </div>
+  </div>
+</body>
+</html>

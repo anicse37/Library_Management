@@ -74,7 +74,7 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 			case "superadmin":
 				http.Redirect(w, r, "superadmin/dashboard", http.StatusSeeOther)
 			default:
-				http.Redirect(w, r, "books", http.StatusSeeOther)
+				http.Redirect(w, r, "/home", http.StatusSeeOther)
 			}
 
 		default:

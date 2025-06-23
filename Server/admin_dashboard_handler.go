@@ -49,7 +49,29 @@ func AllUsersHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 			}
 			RenderTemplate(w, "all-users.html", data)
 		default:
-
+		}
+	}
+}
+func AllAdminsHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			search := r.URL.Query().Get("search")
+			var users library.ListUser
+			if search != "" {
+				users = db.SearchUsers(ctx, search)
+			} else {
+				users, _ = library.GetAllUser(ctx, db)
+			}
+			data := struct {
+				Users library.ListUser
+				Query string
+			}{
+				Users: users,
+				Query: search,
+			}
+			RenderTemplate(w, "all-users.html", data)
+		default:
 		}
 	}
 }

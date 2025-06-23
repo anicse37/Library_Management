@@ -101,3 +101,22 @@ func (db *Database) SearchUsers(ctx context.Context, keyword string) ListUser {
 	}
 	return users
 }
+
+/*working on it*/
+
+func GetAllUsersWithRole(ctx context.Context, db Database) (ListUser, error) {
+	users := ListUser{}
+	user := User{}
+	res, err := db.DB.Query(`SELECT * FROM user WHERE 	role = 'user'`)
+	if err != nil {
+		log.Printf("Error While Loading All Users: %v", err)
+		return users, err
+	}
+	defer res.Close()
+
+	for res.Next() {
+		res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
+		users.Users = append(users.Users, user)
+	}
+	return users, nil
+}

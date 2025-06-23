@@ -30,7 +30,12 @@
                     <td>Year</td>
                     <td>Description</td>
                     <td>Available</td>
+                    {{if eq $.Role "user"}}
                     <td>Borrow</td>
+                    {{end}}
+                    {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
+                    <td>Remove</td>
+                    {{end}}
                 </tr>
                 {{range .Book.Book}}
                 <tr>
@@ -49,10 +54,10 @@
                     </td>
                     {{end}}
 
-                    {{if eq $.Role "admin"}}
+                    {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
                     <td>
                         <form method="POST" action="/remove">
-                            <input type=name="id" value="{{.Id}}">
+                            <input type="hidden" name="id" value="{{.Id}}">
                             <button type="submit" class="remove-btn">Remove</button>
                         </form>
                     </td>

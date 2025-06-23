@@ -3,23 +3,9 @@ package server
 import (
 	"context"
 	"net/http"
-	"text/template"
 
 	library "github.com/anicse37/Library_Management/Files"
 )
-
-func RenderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
-	t, err := template.ParseFiles("Server/static/" + tmpl)
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	err = t.Execute(w, data)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-}
 
 func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -42,16 +28,7 @@ func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerF
 		RenderTemplate(w, "superadmin_dashboard.html", nil)
 	}
 }
-func RequireRole(role string, next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		session, _ := Store.Get(r, "very-secret-key")
-		if rRole, ok := session.Values["role"].(string); !ok || rRole != role {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
-		}
-		next(w, r)
-	}
-}
+
 func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
