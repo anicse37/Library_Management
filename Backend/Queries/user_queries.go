@@ -42,3 +42,7 @@ func SearchAdmins(ctx context.Context, db library.Database, keyword string) (lib
 	user, err := library.SearchWithRole(ctx, db, library.RoleAdmin, keyword)
 	return user, err
 }
+
+func ApproveAdmin(ctx context.Context, db library.Database, name string) {
+	db.DB.QueryContext(ctx, `UPDATE 	FROM user SET approved = 1 WHERE id = ?`, name)
+}

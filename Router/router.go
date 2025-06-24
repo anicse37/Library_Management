@@ -37,7 +37,7 @@ func Router(dns string, SuperAdmin library.User) {
 
 	router.HandleFunc("/all-users", handler.RequireLogin(handler.AllUsersHandler(ctx, db)))
 	router.HandleFunc("/manage-admins", handler.RequireLogin(handler.RequireRole("superadmin", handler.AllAdminsHandler(ctx, db))))
-	// router.HandleFunc("/approve-admins", handler.RequireLogin(handler.RequireRole("superadmin", handler.ApproveHandler(ctx, db))))
+	router.HandleFunc("/approve-admin", handler.RequireLogin(handler.RequireRole("superadmin", handler.ApproveHandler(ctx, db))))
 	// router.HandleFunc("/remove-admins", handler.RequireLogin(handler.RequireRole("superadmin", handler.RemoveHandler(ctx, db))))
 
 	router.HandleFunc("/admin/dashboard", handler.RequireLogin(handler.RequireRole("admin", dashboard.AdminDashboard(ctx, db))))

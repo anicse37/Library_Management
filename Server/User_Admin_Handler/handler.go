@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"net/http"
+	"time"
 
 	library "github.com/anicse37/Library_Management/Backend"
 	queries "github.com/anicse37/Library_Management/Backend/Queries"
@@ -65,9 +66,12 @@ func AllAdminsHandler(ctx context.Context, db library.Database) http.HandlerFunc
 	}
 }
 
-// func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		ApproveAdmin(ctx, db)
-// 		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
-// 	}
-// }
+func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		admin := r.FormValue("admin_id")
+		queries.ApproveAdmin(ctx, db, admin)
+		time.Sleep(2 * time.Second)
+		http.Redirect(w, r, "/manage-admins", http.StatusSeeOther)
+	}
+}
