@@ -27,7 +27,12 @@ func AdminDashboard(ctx context.Context, db library.Database) http.HandlerFunc {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
+		data := struct {
+			Name string
+		}{
+			Name: user.Name,
+		}
 
-		server.RenderTemplate(w, "admin_dashboard.html", nil)
+		server.RenderTemplate(w, "admin_dashboard.html", data)
 	}
 }

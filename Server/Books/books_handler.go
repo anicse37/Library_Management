@@ -17,7 +17,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 			search := r.URL.Query().Get("search")
 			var books library.ListBooks
 			if search != "" {
-				books = db.SearchBook(ctx, search)
+				books = library.SearchBook(ctx, db, search)
 			} else {
 				books = queries.GetAllBooks(ctx, db)
 			}
@@ -49,7 +49,7 @@ func BorrowedBooksHandle(ctx context.Context, db library.Database) http.HandlerF
 			search := r.URL.Query().Get("search")
 			var books library.ListBooks
 			if search != "" {
-				books = db.SearchBorrowedBook(ctx, search)
+				books = library.SearchBorrowedBook(ctx, db, search)
 			} else {
 				books = queries.GetAllBooks(ctx, db)
 			}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Management</title>
+  <link rel="stylesheet" href="/static/css/superadmin.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 0;
+      margin: 0;
+    }
+
+    .navbar {
+      background-color: #007bff;
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .navbar-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .navbar-buttons a {
+      background-color: white;
+      color: #007bff;
+      padding: 8px 14px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .navbar-buttons a:hover {
+      background-color: #e6e6e6;
+    }
+
+    .container {
+      padding: 30px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      margin-top: 10px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .approve-btn, .remove-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .approve-btn:hover {
+      background-color: #218838;
+    }
+
+    .remove-btn {
+      background-color: #dc3545;
+    }
+
+    .remove-btn:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h1>Superadmin Dashboard</h1>
+    <div class="navbar-buttons">
+      <a href="/superadmin/dashboard">Home</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2>Admins Awaiting Approval</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Approve</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Users1.Users}}
+        <tr>
+          <td>{{.Id}}</td>
+          <td>{{.Name}}</td>
+          <td>
+            <form method="POST" action="/approve-admin">
+              <input type="hidden" name="admin_id" value="{{.Id}}">
+              <button type="submit" class="approve-btn">Approve</button>
+            </form>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+
+    <h2>All Admins</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .Users2.Users}}
+        <tr>
+          <td>{{.Id}}</td>
+          <td>{{.Name}}</td>
+          <td>
+            <form method="POST" action="/remove-admin">
+              <input type="hidden" name="admin_id" value="{{.Id}}">
+              <button type="submit" class="remove-btn">Remove</button>
+            </form>
+          </td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

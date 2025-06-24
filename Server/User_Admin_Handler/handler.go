@@ -7,6 +7,7 @@ import (
 	library "github.com/anicse37/Library_Management/Backend"
 	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
+	session "github.com/anicse37/Library_Management/Server/Session"
 )
 
 func AllUsersHandler(ctx context.Context, db library.Database) http.HandlerFunc {
@@ -16,21 +17,29 @@ func AllUsersHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 			search := r.URL.Query().Get("search")
 			var users library.ListUser
 			if search != "" {
-				users = db.SearchUsers(ctx, search)
+				users, _ = queries.SearchUsers(ctx, db, search)
 			} else {
 				users, _ = queries.GetAllUsers(ctx, db)
 			}
+			role := "user"
+			session, _ := session.Store.Get(r, "very-secret-key")
+			if rRole, ok := session.Values[library.SessionKeyRole].(string); ok {
+				role = rRole
+			}
+
 			data := struct {
 				Users library.ListUser
 				Query string
+				Role  string
 			}{
 				Users: users,
 				Query: search,
+				Role:  role,
 			}
 			server.RenderTemplate(w, "all-users.html", data)
 		default:
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}
-
 	}
 }
 func AllAdminsHandler(ctx context.Context, db library.Database) http.HandlerFunc {
@@ -38,21 +47,27 @@ func AllAdminsHandler(ctx context.Context, db library.Database) http.HandlerFunc
 		switch r.Method {
 		case http.MethodGet:
 			search := r.URL.Query().Get("search")
-			var users library.ListUser
-			if search != "" {
-				users = db.SearchUsers(ctx, search)
-			} else {
-				users, _ = queries.GetAllUsers(ctx, db)
-			}
+			user1, _ := queries.GetAdminsNotApproved(ctx, db)
+			user2, _ := queries.GetAdminsApproved(ctx, db)
+
 			data := struct {
-				Users library.ListUser
-				Query string
+				Users1 library.ListUser
+				Users2 library.ListUser
+				Querry string
 			}{
-				Users: users,
-				Query: search,
+				Users1: user1,
+				Users2: user2,
+				Querry: search,
 			}
-			server.RenderTemplate(w, "all-users.html", data)
+			server.RenderTemplate(w, "manage_admins.html", data)
 		default:
 		}
 	}
 }
+
+// func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		ApproveAdmin(ctx, db)
+// 		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
+// 	}
+// }

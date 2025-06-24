@@ -12,26 +12,26 @@ var (
 )
 
 func GetWithRoles(ctx context.Context, db Database, role string) (ListUser, error) {
-	users := ListUser{}
+	users := &ListUser{}
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM user WHERE role = ?", role)
 	if err != nil {
-		return users, ErrorScanningUsers
+		return *users, ErrorScanningUsers
 	}
 	defer result.Close()
 
 	users = ScanUsers(result)
-	return users, nil
+	return *users, nil
 }
-func GetAdminsWithApprovals(ctx context.Context, db Database, approval string) (ListUser, error) {
-	users := ListUser{}
-	result, err := db.DB.QueryContext(ctx, "SELECT * FROM user WHERE role= 'admin' AND approval = '?'", approval)
+func GetAdminsWithApprovals(ctx context.Context, db Database, approval int) (ListUser, error) {
+	users := &ListUser{}
+	result, err := db.DB.QueryContext(ctx, "SELECT * FROM user WHERE (role= 'admin') AND (approved = ?);", approval)
 	if err != nil {
-		return users, ErrorScanningUsers
+		return *users, ErrorScanningUsers
 	}
 	defer result.Close()
 
 	users = ScanUsers(result)
-	return users, nil
+	return *users, nil
 }
 
 func GetWithID(ctx context.Context, db Database, id string, role string) (User, error) {
@@ -47,12 +47,12 @@ func GetWithID(ctx context.Context, db Database, id string, role string) (User, 
 }
 
 // Below are the helper functions.
-func ScanUsers(result *sql.Rows) ListUser {
+func ScanUsers(result *sql.Rows) *ListUser {
 	users := ListUser{}
 	user := User{}
 	for result.Next() {
 		result.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
 		users.Users = append(users.Users, user)
 	}
-	return users
+	return &users
 }

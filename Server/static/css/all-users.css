@@ -78,7 +78,7 @@ h1 {
 }
 
 #usersTable tr:hover {
-    background-color: #e1f5e9;
+    background-color: #0ed488;
     transition: background-color 0.3s ease;
 }
 

@@ -5,15 +5,16 @@ import (
 	"log"
 )
 
-func (db *Database) SearchUsers(ctx context.Context, keyword string) ListUser {
+func SearchWithRole(ctx context.Context, db Database, role string, keyword string) (ListUser, error) {
 	users := ListUser{}
 	user := User{}
-	query := `SELECT * FROM user WHERE name LIKE ? OR id LIKE ?;`
+
+	query := `SELECT * FROM user WHERE (name LIKE ? OR id LIKE ?) AND role = ?`
 	likePattern := "%" + keyword + "%"
-	res, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
+	res, err := db.DB.QueryContext(ctx, query, likePattern, likePattern, role)
 	if err != nil {
 		log.Printf("Error while searching: %v", err)
-		return users
+		return users, err
 	}
 	defer res.Close()
 
@@ -21,10 +22,10 @@ func (db *Database) SearchUsers(ctx context.Context, keyword string) ListUser {
 		res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
 		users.Users = append(users.Users, user)
 	}
-	return users
+	return users, nil
 }
 
-func (db *Database) SearchBook(ctx context.Context, keyword string) ListBooks {
+func SearchBook(ctx context.Context, db Database, keyword string) ListBooks {
 	books := ListBooks{}
 	book := Book{}
 
@@ -43,7 +44,7 @@ func (db *Database) SearchBook(ctx context.Context, keyword string) ListBooks {
 	}
 	return books
 }
-func (db *Database) SearchBorrowedBook(ctx context.Context, keyword string) ListBooks {
+func SearchBorrowedBook(ctx context.Context, db Database, keyword string) ListBooks {
 	books := ListBooks{}
 	book := Book{}
 

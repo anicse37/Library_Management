@@ -19,7 +19,7 @@ func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 
 		r.ParseForm()
 		username := r.FormValue(library.SessionKeyUsername)
-		password := r.FormValue(library.SessionKeyUsername)
+		password := r.FormValue(library.SessionKeyPassword)
 		id := r.FormValue(library.SessionKeyUserId)
 		role := r.FormValue(library.SessionKeyRole)
 
