@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -70,7 +71,17 @@ func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		admin := r.FormValue("admin_id")
+		fmt.Println(admin)
 		queries.ApproveAdmin(ctx, db, admin)
+		time.Sleep(2 * time.Second)
+		http.Redirect(w, r, "/manage-admins", http.StatusSeeOther)
+	}
+}
+func RemoveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		admin := r.FormValue("admin_id")
+		queries.RemoveAdmin(ctx, db, admin)
 		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/manage-admins", http.StatusSeeOther)
 	}

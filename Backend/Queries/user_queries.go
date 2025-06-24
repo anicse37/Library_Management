@@ -43,6 +43,10 @@ func SearchAdmins(ctx context.Context, db library.Database, keyword string) (lib
 	return user, err
 }
 
-func ApproveAdmin(ctx context.Context, db library.Database, name string) {
-	db.DB.QueryContext(ctx, `UPDATE 	FROM user SET approved = 1 WHERE id = ?`, name)
+func ApproveAdmin(ctx context.Context, db library.Database, id string) {
+	db.DB.ExecContext(ctx, `UPDATE user SET approved = 1 WHERE id = ?`, id)
+}
+
+func RemoveAdmin(ctx context.Context, db library.Database, id string) {
+	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
 }
