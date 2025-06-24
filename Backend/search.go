@@ -24,11 +24,30 @@ func (db *Database) SearchUsers(ctx context.Context, keyword string) ListUser {
 	return users
 }
 
-func (db *Database) SearchBook(ctx context.Context, keyword string) ListBookJSON {
-	books := ListBookJSON{}
-	book := BookJSON{}
+func (db *Database) SearchBook(ctx context.Context, keyword string) ListBooks {
+	books := ListBooks{}
+	book := Book{}
 
 	query := `SELECT * FROM books WHERE name LIKE ? OR author LIKE ?;`
+	likePattern := "%" + keyword + "%"
+	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
+	if err != nil {
+		log.Printf("Error while searching: %v", err)
+		return books
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
+		books.Book = append(books.Book, book)
+	}
+	return books
+}
+func (db *Database) SearchBorrowedBook(ctx context.Context, keyword string) ListBooks {
+	books := ListBooks{}
+	book := Book{}
+
+	query := `SELECT * FROM borrowed_books WHERE name LIKE ? OR author LIKE ?;`
 	likePattern := "%" + keyword + "%"
 	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
 	if err != nil {

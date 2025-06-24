@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrowed Books</title>
+   <link rel="stylesheet" href="/Server/static/css/borrowed_books.css">
+</head>
+<body>
+
+    <header>
+        <h2>Borrowed Books</h2>
+        <div class="nav-buttons">
+            <button onclick="location.href='/dashboard'">Home</button>
+            <button onclick="location.href='/logout'">Logout</button>
+        </div>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Borrowed Date</th>
+                <th>Return Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .}}
+            <tr>
+                <td>{{.BookID}}</td>
+                <td>{{.Title}}</td>
+                <td>{{.BorrowedDate.Format "2006-01-02"}}</td>
+                <td>
+                    {{if .ReturnDate.Valid}}{{.ReturnDate.Time.Format "2006-01-02"}}
+                    {{else}}Not Returned{{end}}
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="4">You haven't borrowed any books yet.</td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+
+</body>
+</html>

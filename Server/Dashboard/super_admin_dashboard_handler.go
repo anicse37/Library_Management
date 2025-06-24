@@ -2,9 +2,11 @@ package dashboard
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
 	session "github.com/anicse37/Library_Management/Server/Session"
 )
@@ -21,7 +23,7 @@ func SuperAdminDashboard(ctx context.Context, db library.Database) http.HandlerF
 			return
 		}
 
-		user, err := db.GetUserByID(ctx, userID, library.SessionKeyUserId)
+		user, err := queries.GetAdminWithId(ctx, db, userID)
 		if err != nil || !user.Approved || user.Role != "superadmin" {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -46,7 +48,11 @@ func ApproveUsers(ctx context.Context, db library.Database) http.HandlerFunc {
 
 		switch r.Method {
 		case http.MethodGet:
-			user := library.GetApprovalUsers(ctx, db)
+			user, err := queries.GetAdminsApproved(ctx, db)
+			if err != nil {
+				fmt.Printf("some error:%v", err)
+				return
+			}
 			data := struct {
 				User library.ListUser
 			}{

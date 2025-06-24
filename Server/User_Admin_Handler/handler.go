@@ -4,7 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
 )
 
@@ -17,7 +18,7 @@ func AllUsersHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 			if search != "" {
 				users = db.SearchUsers(ctx, search)
 			} else {
-				users, _ = library.GetAllUser(ctx, db)
+				users, _ = queries.GetAllUsers(ctx, db)
 			}
 			data := struct {
 				Users library.ListUser
@@ -41,7 +42,7 @@ func AllAdminsHandler(ctx context.Context, db library.Database) http.HandlerFunc
 			if search != "" {
 				users = db.SearchUsers(ctx, search)
 			} else {
-				users, _ = library.GetAllUser(ctx, db)
+				users, _ = queries.GetAllUsers(ctx, db)
 			}
 			data := struct {
 				Users library.ListUser

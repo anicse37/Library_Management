@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	session "github.com/anicse37/Library_Management/Server/Session"
 )
 
-func Home(ctx context.Context, db library.Database) http.HandlerFunc {
+func UserHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		session, err := session.Store.Get(r, "very-secret-key")
 		if err != nil {
@@ -18,7 +19,7 @@ func Home(ctx context.Context, db library.Database) http.HandlerFunc {
 		}
 
 		id := session.Values[library.SessionKeyUserId].(string)
-		User, err := db.GetUserByID(ctx, id, library.SessionKeyUserId)
+		User, err := queries.GetAdminWithId(ctx, db, id)
 		if err != nil {
 			fmt.Printf("error yaha hai: %v\n", err)
 		}
@@ -29,5 +30,4 @@ func Home(ctx context.Context, db library.Database) http.HandlerFunc {
 		}
 		RenderTemplate(w, "home_user.html", data)
 	}
-
 }

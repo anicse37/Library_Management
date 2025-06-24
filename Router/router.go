@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
 	server "github.com/anicse37/Library_Management/Server"
 	books "github.com/anicse37/Library_Management/Server/Books"
 	dashboard "github.com/anicse37/Library_Management/Server/Dashboard"
@@ -15,10 +15,9 @@ import (
 
 func Router(dns string, SuperAdmin library.User) {
 	db := library.Database{}
-	db.DB = library.StartDB(dns)
+	db.DB = StartDB(dns)
 	defer db.DB.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
-
 	defer cancel()
 	db.InsertSuperAdmin(ctx, SuperAdmin)
 	router := http.NewServeMux()
@@ -30,9 +29,11 @@ func Router(dns string, SuperAdmin library.User) {
 	router.HandleFunc("/login", authentication.LoginHandler(ctx, db))
 	router.HandleFunc("/logout", authentication.LogoutHandler())
 
-	router.HandleFunc("/home", handler.RequireLogin(server.Home(ctx, db)))
+	router.HandleFunc("/home", handler.RequireLogin(server.UserHandler(ctx, db)))
 
 	router.HandleFunc("/books", handler.RequireLogin(books.BooksHandle(ctx, db)))
+	router.HandleFunc("/borrowed-books", handler.RequireLogin(books.BorrowedBooksHandle(ctx, db)))
+
 	router.HandleFunc("/all-users", handler.RequireLogin(handler.AllUsersHandler(ctx, db)))
 	router.HandleFunc("/all-admins", handler.RequireLogin(handler.AllAdminsHandler(ctx, db)))
 

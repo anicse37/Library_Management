@@ -4,7 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
 	session "github.com/anicse37/Library_Management/Server/Session"
 )
@@ -22,7 +23,7 @@ func RegisterHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 		id := r.FormValue(library.SessionKeyUserId)
 		role := r.FormValue(library.SessionKeyRole)
 
-		db.InsertUser(ctx, library.User{
+		queries.InsertUsers(ctx, db, library.User{
 			Id:       id,
 			Name:     username,
 			Password: password,

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
 	server "github.com/anicse37/Library_Management/Server"
 	session "github.com/anicse37/Library_Management/Server/Session"
 )
@@ -14,7 +14,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 		switch r.Method {
 		case http.MethodGet:
 			search := r.URL.Query().Get("search")
-			var books library.ListBookJSON
+			var books library.ListBooks
 			if search != "" {
 				books = db.SearchBook(ctx, search)
 			} else {
@@ -27,7 +27,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 			}
 
 			data := struct {
-				Book  library.ListBookJSON
+				Book  library.ListBooks
 				Query string
 				Role  string
 			}{
@@ -36,6 +36,38 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 				Role:  role,
 			}
 			server.RenderTemplate(w, "books.html", data)
+		default:
+			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		}
+	}
+}
+func BorrowedBooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		switch r.Method {
+		case http.MethodGet:
+			search := r.URL.Query().Get("search")
+			var books library.ListBooks
+			if search != "" {
+				books = db.SearchBorrowedBook(ctx, search)
+			} else {
+				books = db.GetAllBorrowedBooks(ctx)
+			}
+			role := "user"
+			session, _ := session.Store.Get(r, "very-secret-key")
+			if rRole, ok := session.Values[library.SessionKeyRole].(string); ok {
+				role = rRole
+			}
+
+			data := struct {
+				Book  library.ListBooks
+				Query string
+				Role  string
+			}{
+				Book:  books,
+				Query: search,
+				Role:  role,
+			}
+			server.RenderTemplate(w, "borrowed_books.html", data)
 		default:
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}

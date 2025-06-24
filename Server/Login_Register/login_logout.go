@@ -4,7 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	library "github.com/anicse37/Library_Management/Files"
+	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	session "github.com/anicse37/Library_Management/Server/Session"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -17,7 +18,7 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 			id := r.FormValue(library.SessionKeyUserId)
 			password := r.FormValue(library.SessionKeyPassword)
 
-			user, err := db.GetUserByID(ctx, id, "userid")
+			user, err := queries.GetUserWithId(ctx, db, id)
 			if err != nil {
 				http.Error(w, "Invalid ID", http.StatusUnauthorized)
 				return
