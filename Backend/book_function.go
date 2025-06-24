@@ -8,12 +8,12 @@ import (
 )
 
 func GetAllBooks(ctx context.Context, db Database) ListBooks {
-	books := ListBooks{}
+
 	result, err := db.DB.QueryContext(ctx, "SELECT *FROM books;")
 	if err != nil {
 		log.Fatalf("Error Getting Data: %v", err)
 	}
-	books = ScanBooks(result)
+	books := ScanBooks(result)
 	return books
 }
 func GetBooksById(ctx context.Context, db Database, id int) {

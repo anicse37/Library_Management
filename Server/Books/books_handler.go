@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
 	session "github.com/anicse37/Library_Management/Server/Session"
 )
@@ -18,7 +19,7 @@ func BooksHandle(ctx context.Context, db library.Database) http.HandlerFunc {
 			if search != "" {
 				books = db.SearchBook(ctx, search)
 			} else {
-				books = db.GetAllBooks(ctx)
+				books = queries.GetAllBooks(ctx, db)
 			}
 			role := "user"
 			session, _ := session.Store.Get(r, "very-secret-key")
@@ -50,7 +51,7 @@ func BorrowedBooksHandle(ctx context.Context, db library.Database) http.HandlerF
 			if search != "" {
 				books = db.SearchBorrowedBook(ctx, search)
 			} else {
-				books = db.GetAllBorrowedBooks(ctx)
+				books = queries.GetAllBooks(ctx, db)
 			}
 			role := "user"
 			session, _ := session.Store.Get(r, "very-secret-key")

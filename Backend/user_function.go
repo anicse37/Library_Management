@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	ErrorScanningUser  = errors.New("Error Scanning user from database:")
-	ErrorScanningUsers = errors.New("Error Scanning users from database:")
+	ErrorScanningUser  = errors.New("error scanning user from database")
+	ErrorScanningUsers = errors.New("error scanning users from database")
 )
 
 func GetWithRoles(ctx context.Context, db Database, role string) (ListUser, error) {
@@ -36,7 +36,7 @@ func GetAdminsWithApprovals(ctx context.Context, db Database, approval string) (
 
 func GetWithID(ctx context.Context, db Database, id string, role string) (User, error) {
 	user := User{}
-	res := db.DB.QueryRowContext(ctx, `SELECT name, id, role, password, approved FROM ? WHERE id = '?';`, role, id)
+	res := db.DB.QueryRowContext(ctx, `SELECT name, id, role, password, approved FROM user WHERE id = ?;`, id)
 
 	err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
 	if err != nil {

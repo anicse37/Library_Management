@@ -25,7 +25,7 @@ func LoginHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 			}
 
 			if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-				http.Error(w, "Invalid password", http.StatusUnauthorized)
+				http.Error(w, err.Error(), http.StatusUnauthorized)
 				return
 			}
 

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	library "github.com/anicse37/Library_Management/Backend"
+	queries "github.com/anicse37/Library_Management/Backend/Queries"
 	server "github.com/anicse37/Library_Management/Server"
 	books "github.com/anicse37/Library_Management/Server/Books"
 	dashboard "github.com/anicse37/Library_Management/Server/Dashboard"
@@ -19,7 +20,7 @@ func Router(dns string, SuperAdmin library.User) {
 	defer db.DB.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
 	defer cancel()
-	db.InsertSuperAdmin(ctx, SuperAdmin)
+	queries.InsertSuperAdmin(ctx, db, SuperAdmin)
 	router := http.NewServeMux()
 
 	fs := http.FileServer(http.Dir("Server/static/css"))
