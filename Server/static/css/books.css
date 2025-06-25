@@ -1,4 +1,4 @@
-/* Base reset */
+/*books*/
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,6 @@
     font-family: Arial, sans-serif;
 }
 
-/* Page container */
 .container {
     max-width: 1000px;
     margin: 40px auto;
@@ -16,14 +15,12 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Page heading */
 h1 {
     text-align: center;
     margin-bottom: 30px;
     color: #333;
 }
 
-/* Search bar styling */
 .search-bar {
     display: flex;
     justify-content: center;
@@ -54,7 +51,6 @@ h1 {
     background-color: #45a049;
 }
 
-/* Books table */
 #booksTable {
     width: 100%;
     border-collapse: collapse;
@@ -82,9 +78,8 @@ h1 {
     transition: background-color 0.3s ease;
 }
 
-/* Buttons in table */
 .borrow-btn,
-.remove-btn {
+.remove_btn {
     padding: 6px 10px;
     font-size: 14px;
     border: none;
@@ -102,15 +97,14 @@ h1 {
     background-color: #45a049;
 }
 
-.remove-btn {
+.remove_btn {
     background-color: #f44336;
 }
 
-.remove-btn:hover {
+.remove_btn:hover {
     background-color: #d32f2f;
 }
 
-/* Navigation Buttons (Home, Logout) */
 .nav-buttons {
     display: flex;
     justify-content: center;

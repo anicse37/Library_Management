@@ -33,12 +33,15 @@ func Router(dns string, SuperAdmin library.User) {
 	router.HandleFunc("/home", handler.RequireLogin(server.UserHandler(ctx, db)))
 
 	router.HandleFunc("/books", handler.RequireLogin(books.BooksHandle(ctx, db)))
-	router.HandleFunc("/borrowed-books", handler.RequireLogin(books.BorrowedBooksHandle(ctx, db)))
+	router.HandleFunc("/add_book", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.AddBooksHandler(ctx, db))))
+	router.HandleFunc("/remove_books", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.RemoveBooksHandler(ctx, db))))
+	router.HandleFunc("/remove_user", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.RemoveUserHandler(ctx, db))))
+	router.HandleFunc("/borrowed_books", handler.RequireLogin(books.BorrowedBooksHandle(ctx, db)))
 
-	router.HandleFunc("/all-users", handler.RequireLogin(handler.AllUsersHandler(ctx, db)))
-	router.HandleFunc("/manage-admins", handler.RequireLogin(handler.RequireRole("superadmin", handler.AllAdminsHandler(ctx, db))))
-	router.HandleFunc("/approve-admin", handler.RequireLogin(handler.RequireRole("superadmin", handler.ApproveHandler(ctx, db))))
-	router.HandleFunc("/remove-admin", handler.RequireLogin(handler.RequireRole("superadmin", handler.RemoveHandler(ctx, db))))
+	router.HandleFunc("/all_users", handler.RequireLogin(handler.AllUsersHandler(ctx, db)))
+	router.HandleFunc("/manage_admins", handler.RequireLogin(handler.RequireRole("superadmin", handler.AllAdminsHandler(ctx, db))))
+	router.HandleFunc("/approve_admin", handler.RequireLogin(handler.RequireRole("superadmin", handler.ApproveHandler(ctx, db))))
+	router.HandleFunc("/remove_admin", handler.RequireLogin(handler.RequireRole("superadmin", handler.RemoveAdminHandler(ctx, db))))
 
 	router.HandleFunc("/admin/dashboard", handler.RequireLogin(handler.RequireRole("admin", dashboard.AdminDashboard(ctx, db))))
 	router.HandleFunc("/superadmin/dashboard", handler.RequireLogin(handler.RequireRole("superadmin", dashboard.SuperAdminDashboard(ctx, db))))

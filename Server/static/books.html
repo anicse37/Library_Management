@@ -13,7 +13,13 @@
     <header>
         <h1>Available Books</h1>
         <div class="nav-buttons">
-            <button onclick="location.href='/dashboard'">Home</button>
+            <button onclick="location.href='/add_book'">Add Books</button>
+            {{if eq $.Role "superadmin"}}
+            <button onclick="location.href='/superadmin/dashboard'">Home</button>
+            {{end}}
+            {{if eq $.Role "admin"}}
+            <button onclick="location.href='/admin/dashboard'">Home</button>
+            {{end}}
             <button onclick="location.href='/logout'">Logout</button>
         </div>
     </header>
@@ -59,9 +65,17 @@
 
                     {{if eq $.Role "admin"}}
                     <td>
-                        <form method="POST" action="/remove">
+                        <form method="POST" action="/remove_books">
                             <input type="hidden" name="id" value="{{.Id}}">
-                            <button type="submit" class="remove-btn">Remove</button>
+                            <button type="submit" class="remove_btn">Remove</button>
+                        </form>
+                    </td>
+                    {{end}}
+                    {{if eq $.Role "superadmin"}}
+                    <td>
+                        <form method="POST" action="/remove_books">
+                            <input type="hidden" name="book_id" value="{{.Id}}">
+                            <button type="submit" class="remove_btn">Remove</button>
                         </form>
                     </td>
                     {{end}}

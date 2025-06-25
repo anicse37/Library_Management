@@ -50,3 +50,12 @@ func ApproveAdmin(ctx context.Context, db library.Database, id string) {
 func RemoveAdmin(ctx context.Context, db library.Database, id string) {
 	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
 }
+func RemoveUser(ctx context.Context, db library.Database, id string) {
+	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
+}
+func RemoveBooks(ctx context.Context, db library.Database, id string) {
+	db.DB.ExecContext(ctx, `DELETE FROM books WHERE id = ?`, id)
+}
+func AddBooks(ctx context.Context, db library.Database, book library.Book) {
+	InsertBooks(ctx, db, book)
+}

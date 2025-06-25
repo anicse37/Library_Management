@@ -32,9 +32,9 @@
           <td>{{.Id}}</td>
           <td>{{.Name}}</td>
           <td>
-            <form method="POST" action="/approve-admin">
+            <form method="POST" action="/approve_admin">
               <input type="hidden" name="admin_id" value="{{.Id}}">
-              <button type="submit" class="approve-btn">Approve</button>
+              <button type="submit" class="approve_btn">Approve</button>
             </form>
           </td>
         </tr>
@@ -57,9 +57,9 @@
           <td>{{.Id}}</td>
           <td>{{.Name}}</td>
           <td>
-            <form method="POST" action="/remove-admin">
+            <form method="POST" action="/remove_admin">
               <input type="hidden" name="admin_id" value="{{.Id}}">
-              <button type="submit" class="remove-btn">Remove</button>
+              <button type="submit" class="remove_btn">Remove</button>
             </form>
           </td>
         </tr>

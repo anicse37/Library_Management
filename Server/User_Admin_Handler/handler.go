@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	library "github.com/anicse37/Library_Management/Backend"
@@ -38,7 +39,7 @@ func AllUsersHandler(ctx context.Context, db library.Database) http.HandlerFunc 
 				Query: search,
 				Role:  role,
 			}
-			server.RenderTemplate(w, "all-users.html", data)
+			server.RenderTemplate(w, "all_users.html", data)
 		default:
 			http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
 		}
@@ -74,15 +75,59 @@ func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 		fmt.Println(admin)
 		queries.ApproveAdmin(ctx, db, admin)
 		time.Sleep(2 * time.Second)
-		http.Redirect(w, r, "/manage-admins", http.StatusSeeOther)
+		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
 	}
 }
-func RemoveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+func RemoveAdminHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		admin := r.FormValue("admin_id")
 		queries.RemoveAdmin(ctx, db, admin)
 		time.Sleep(2 * time.Second)
-		http.Redirect(w, r, "/manage-admins", http.StatusSeeOther)
+		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
+	}
+}
+func RemoveUserHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		user := r.FormValue("user_id")
+		queries.RemoveUser(ctx, db, user)
+		time.Sleep(2 * time.Second)
+		http.Redirect(w, r, "/all_users", http.StatusSeeOther)
+	}
+}
+func RemoveBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		book := r.FormValue("book_id")
+		queries.RemoveBooks(ctx, db, book)
+		http.Redirect(w, r, "/books", http.StatusSeeOther)
+	}
+}
+func AddBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			server.RenderTemplate(w, "add_books.html", nil)
+			return
+		}
+		r.ParseForm()
+		name := r.FormValue("title")
+		author := r.FormValue("author")
+		year := r.FormValue("year")
+		description := r.FormValue("description")
+		quantity := r.FormValue("quantity")
+		year1, _ := strconv.Atoi(year)
+		quantity1, _ := strconv.Atoi(quantity)
+
+		book := library.Book{
+			Name:        name,
+			Author:      author,
+			Year:        year1,
+			Description: description,
+			Available:   quantity1,
+		}
+
+		queries.AddBooks(ctx, db, book)
+		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}
 }

@@ -1,3 +1,5 @@
+/*login*/
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -52,17 +54,13 @@ button:hover {
 .login-to-register {
     display: flex;
     justify-content: center;
-    /* Center horizontally */
     align-items: center;
-    /* Center vertically */
     height: 10vh;
-    /* Full viewport height for vertical centering */
 }
 
 .login-to-register a {
     padding: 12px 24px;
     background-color: #007BFF;
-    /* Bootstrap blue */
     color: white;
     text-decoration: none;
     border-radius: 8px;
