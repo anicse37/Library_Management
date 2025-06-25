@@ -65,7 +65,7 @@
                     <td>
                         {{if eq $.Role "user"}}
                         <form method="POST" action="/borrow">
-                            <input type="hidden" name="id" value="{{.Id}}">
+                            <input type="hidden" name="book_id" value="{{.Id}}">
                             <button type="submit" class="borrow-btn">Borrow</button>
                         </form>
                         {{end}}

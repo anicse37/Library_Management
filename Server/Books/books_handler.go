@@ -48,13 +48,16 @@ func BorrowedBooksHandle(ctx context.Context, db library.Database) http.HandlerF
 		case http.MethodGet:
 			search := r.URL.Query().Get("search")
 			var books library.ListBooks
+
+			session, _ := session.Store.Get(r, "very-secret-key")
+			userid, _ := session.Values[library.SessionKeyUserId].(string)
+
 			if search != "" {
 				books = library.SearchBorrowedBook(ctx, db, search)
 			} else {
-				books = queries.GetAllBooks(ctx, db)
+				books = queries.GetAllBorrowedBooks(ctx, db, userid)
 			}
 			role := "user"
-			session, _ := session.Store.Get(r, "very-secret-key")
 			if rRole, ok := session.Values[library.SessionKeyRole].(string); ok {
 				role = rRole
 			}

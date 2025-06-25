@@ -104,6 +104,22 @@ func RemoveBooksHandler(ctx context.Context, db library.Database) http.HandlerFu
 		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}
 }
+func BorrowHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		session, _ := session.Store.Get(r, "very-secret-key")
+		userID, _ := session.Values[library.SessionKeyUserId].(string)
+
+		book_id, _ := strconv.Atoi(r.FormValue("book_id"))
+		book := library.Borrowed_Book{
+			User_id:     userID,
+			Book_id:     book_id,
+			Borrow_Date: time.Now(),
+		}
+		queries.BorrowBook(ctx, db, book)
+		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
+	}
+}
 func AddBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {

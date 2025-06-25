@@ -28,12 +28,6 @@ type Book struct {
 	Available   int
 }
 
-//	type Book struct {
-//		Name        string
-//		Author      string
-//		Year        int
-//		Description string
-//	}
 type User struct {
 	Name     string
 	Id       string

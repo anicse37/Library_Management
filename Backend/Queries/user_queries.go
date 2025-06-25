@@ -59,3 +59,6 @@ func RemoveBooks(ctx context.Context, db library.Database, id string) {
 func AddBooks(ctx context.Context, db library.Database, book library.Book) {
 	InsertBooks(ctx, db, book)
 }
+func BorrowBook(ctx context.Context, db library.Database, book library.Borrowed_Book) {
+	InsertBorrowedBooks(ctx, db, book)
+}

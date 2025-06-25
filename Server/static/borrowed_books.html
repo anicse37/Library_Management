@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Borrowed Books</title>
-   <link rel="stylesheet" href="/Server/static/css/borrowed_books.css">
+    <link rel="stylesheet" href="/Server/static/css/borrowed_books.css">
 </head>
 <body>
 
@@ -25,13 +25,14 @@
             </tr>
         </thead>
         <tbody>
-            {{range .}}
+            {{range .Book.Borrowed_Books}}
             <tr>
-                <td>{{.BookID}}</td>
-                <td>{{.Title}}</td>
-                <td>{{.BorrowedDate.Format "2006-01-02"}}</td>
+                <td>{{.Book_id}}</td>
+                <td>{{.BookName}}</td>
+                <td>{{.Borrow_Date.Format "2006-01-02"}}</td>
                 <td>
-                    {{if .ReturnDate.Valid}}{{.ReturnDate.Time.Format "2006-01-02"}}
+                    {{if .Returned_Date}}
+                        {{.Returned_Date.Format "2006-01-02"}}
                     {{else}}Not Returned{{end}}
                 </td>
             </tr>
