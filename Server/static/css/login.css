@@ -15,23 +15,27 @@ body {
 .navbar {
   background-color: #1e2a38;
   padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .logo {
-  color: #fff;
+  color: white;
   font-size: 1.5rem;
 }
 
 .nav-links a {
-  color: #ffffff;
+  color: white;
   text-decoration: none;
-  margin-left: 20px;
-  padding: 8px 16px;
   background-color: #007bff;
-  border-radius: 4px;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 6px;
   transition: background-color 0.3s ease;
 }
 
@@ -111,6 +115,7 @@ button:hover {
 .login-to-register a:hover {
   background-color: #0056b3;
 }
+
 /* Navbar Styles */
 .navbar {
   background-color: #1e2a38;
