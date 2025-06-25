@@ -4,18 +4,28 @@
   <meta charset="UTF-8">
   <title>Super Admin Dashboard</title>
   <link rel="stylesheet" href="/Server/static/css/superadmin_dashboard.css">
-  
 </head>
 <body>
-  <div class="container">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h1 class="logo">Library Management</h1>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
     <h1>Super Admin Dashboard</h1>
     <p>Welcome, Super Admin! You can perform the following high-level actions:</p>
     <div class="actions">
-      <a href="/books">Manage All Books</a>
-      <a href="/manage_admins">Manage Admins</a>
-      <a href="/all_users">View All Users</a>
-      <a href="/logout">Logout</a>
+      <a href="/books">📚 Manage All Books</a>
+      <a href="/manage_admins">🛠️ Manage Admins</a>
+      <a href="/all_users">👥 View All Users</a>
     </div>
-  </div>
+  </main>
+
 </body>
 </html>

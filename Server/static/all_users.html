@@ -8,38 +8,45 @@
 </head>
 
 <body>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Library Management</h1>
+            <div class="nav-links">
+                <a href="/home">Home</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>All Registered Users</h1>
+        <h2>All Registered Users</h2>
 
         <div class="search-bar">
             <form class="search-bar" method="GET" action="/all_users">
-                <input type="text" name="search" id="searchInput" placeholder="Search by name or email..."
-                    value="{{.Query}}">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or email..." value="{{.Query}}">
                 <button type="submit">Search</button>
             </form>
         </div>
 
         <table id="usersTable">
-            <tbody id="usersBody">
+            <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>ID</td>
-                    <td>Role</td>
-                    {{if eq $.Role "admin"}}
-                    <td>Remove</td>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Role</th>
+                    {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
+                    <th>Remove</th>
                     {{end}}
-                    {{if eq $.Role "superadmin"}}
-                    <td>Remove</td>
-                    {{end}}
-
                 </tr>
-
+            </thead>
+            <tbody id="usersBody">
                 {{range $.Users.Users}}
                 <tr>
                     <td>{{.Name}}</td>
                     <td>{{.Id}}</td>
                     <td>{{.Role}}</td>
-                    {{if eq $.Role "admin"}}
+                    {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
                     <td>
                         <form method="POST" action="/remove_user">
                             <input type="hidden" name="user_id" value="{{.Id}}">
@@ -47,20 +54,12 @@
                         </form>
                     </td>
                     {{end}}
-                    {{if eq $.Role "superadmin"}}
-                    <td>
-                        <form method="POST" action="/remove_user">
-                            <input type="hidden" name="user_id" value="{{.Id}}">
-                            <button type="submit" class="remove_btn">Remove</button>
-                        </form>
-                    </td>
-                    {{end}}
-
                 </tr>
                 {{end}}
             </tbody>
         </table>
     </div>
+
 </body>
 
 </html>

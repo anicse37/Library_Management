@@ -39,7 +39,3 @@ Open http://localhost:5050/login in your browser.
 🛑 Disclaimer
 This code is strictly for learning and demonstration purposes.
 It lacks production-level features such as input validation, security hardening, and error handling.
-### If it is not working
-
-![image](https://i.imgflip.com/4t169s.jpg)
-It'll work

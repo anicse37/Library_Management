@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Add Book</title>
-    <link rel="stylesheet" href="/Server/static/css/add_books.css">
- </head>
+    <link rel="stylesheet" href="/Server/static/css/all_books.css">
+</head>
 <body>
 
-    <div class="nav">
-        <h1>Library Management</h1>
-        <div class="nav-buttons">
-            <a href="/home">Home</a>
-            <a href="/logout">Logout</a>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Library Management</h1>
+            <div class="nav-links">
+                <a href="/home">Home</a>
+                <a href="/logout">Logout</a>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <div class="form-container">
+    <main class="form-wrapper">
         <h2>Add a New Book</h2>
-        <form action="/add_book" method="POST">
+        <form action="/add_book" method="POST" class="book-form">
             <label for="title">Book Title</label>
             <input type="text" id="title" name="title" required>
 
@@ -35,7 +37,7 @@
 
             <button type="submit">Add Book</button>
         </form>
-    </div>
+    </main>
 
 </body>
 </html>

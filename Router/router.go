@@ -30,7 +30,7 @@ func Router(dns string, SuperAdmin library.User) {
 	router.HandleFunc("/login", authentication.LoginHandler(ctx, db))
 	router.HandleFunc("/logout", authentication.LogoutHandler())
 
-	router.HandleFunc("/home", handler.RequireLogin(server.UserHandler(ctx, db)))
+	router.HandleFunc("/home", handler.RequireLogin(handler.RequireRole("user", server.UserHandler(ctx, db))))
 
 	router.HandleFunc("/books", handler.RequireLogin(books.BooksHandle(ctx, db)))
 	router.HandleFunc("/add_book", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.AddBooksHandler(ctx, db))))

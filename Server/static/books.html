@@ -1,35 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Books</title>
     <link rel="stylesheet" href="/Server/static/css/books.css">
-
 </head>
 
 <body>
 
-    <header>
-        <h1>Available Books</h1>
-        <div class="nav-buttons">
-            <button onclick="location.href='/add_book'">Add Books</button>
-            {{if eq $.Role "superadmin"}}
-            <button onclick="location.href='/superadmin/dashboard'">Home</button>
-            {{end}}
-            {{if eq $.Role "admin"}}
-            <button onclick="location.href='/admin/dashboard'">Home</button>
-            {{end}}
-            <button onclick="location.href='/logout'">Logout</button>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Library Management</h1>
+            <div class="nav-links">
+                {{if eq $.Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "user"}}
+                <a href="/home">Home</a>
+                {{end}}
+                <a href="/logout">Logout</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <div class="container">
 
+        <div class="top-controls">
+            <h2>Available Books</h2>
+            {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
+            <button onclick="location.href='/add_book'" class="add-book-btn">Add Book</button>
+            {{end}}
+        </div>
+
         <div class="search-bar">
-            <form class="search-bar" method="GET" action="/books">
-                <input type="text" name="search" id="searchInput" placeholder="Search by name or author..."
-                    value="{{.Query}}">
+            <form method="GET" action="/books">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or author..." value="{{.Query}}">
                 <button type="submit">Search</button>
             </form>
         </div>
@@ -54,32 +62,21 @@
                     <td>{{.Description}}</td>
                     <td>{{.Available}}</td>
 
-                    {{if eq $.Role "user"}}
                     <td>
+                        {{if eq $.Role "user"}}
                         <form method="POST" action="/borrow">
                             <input type="hidden" name="id" value="{{.Id}}">
                             <button type="submit" class="borrow-btn">Borrow</button>
                         </form>
-                    </td>
-                    {{end}}
+                        {{end}}
 
-                    {{if eq $.Role "admin"}}
-                    <td>
+                        {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
                         <form method="POST" action="/remove_books">
-                            <input type="hidden" name="id" value="{{.Id}}">
+                            <input type="hidden" name="{{if eq $.Role "superadmin"}}book_id{{else}}id{{end}}" value="{{.Id}}">
                             <button type="submit" class="remove_btn">Remove</button>
                         </form>
+                        {{end}}
                     </td>
-                    {{end}}
-                    {{if eq $.Role "superadmin"}}
-                    <td>
-                        <form method="POST" action="/remove_books">
-                            <input type="hidden" name="book_id" value="{{.Id}}">
-                            <button type="submit" class="remove_btn">Remove</button>
-                        </form>
-                    </td>
-                    {{end}}
-
                 </tr>
                 {{end}}
             </tbody>
@@ -87,5 +84,4 @@
     </div>
 
 </body>
-
 </html>

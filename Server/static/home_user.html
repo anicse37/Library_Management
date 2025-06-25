@@ -4,10 +4,21 @@
   <meta charset="UTF-8">
   <title>User Home</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="/Server/static/css/home_user.css">
+  <link rel="stylesheet" href="/Server/static/css/home_user.css">
 </head>
 <body>
-  <div class="card">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h1 class="logo">Library Management</h1>
+      <div class="nav-links">
+        <a href="/home">Home</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="card">
     <h1>Welcome, {{.User.Name}}!</h1>
     <p>Your ID: {{.User.Id}}<br>
        Role: {{.User.Role}}</p>
@@ -17,6 +28,7 @@
       <a href="/your-books" class="btn">📖 Your Borrowed Books</a>
       <a href="/logout" class="btn logout">🔓 Logout</a>
     </div>
-  </div>
+  </main>
+
 </body>
 </html>

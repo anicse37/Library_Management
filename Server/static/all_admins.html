@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>All Admins</title>
@@ -8,36 +7,46 @@
 </head>
 
 <body>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Library Management</h1>
+            <div class="nav-links">
+                <a href="/home">Home</a>
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>All Registered Admins</h1>
+        <h2>All Registered Admins</h2>
 
         <div class="search-bar">
-            <form class="search-bar" method="GET" action="/admins">
-                <input type="text" name="search" id="searchInput" placeholder="Search by name or id..."
-                    value="{{.Query}}">
+            <form method="GET" action="/admins">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or id..." value="{{.Query}}">
                 <button type="submit">Search</button>
             </form>
         </div>
 
         <table id="usersTable">
-            <tbody id="usersBody">
+            <thead>
                 <tr>
-                    <td>Name</td>
-                    <td>ID</td>
-                    <td>Role</td>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Role</th>
                 </tr>
-
+            </thead>
+            <tbody id="usersBody">
                 {{range $.Users.Users}}
                 <tr>
                     <td>{{.Name}}</td>
                     <td>{{.Id}}</td>
                     <td>{{.Role}}</td>
-
                 </tr>
                 {{end}}
             </tbody>
         </table>
     </div>
-</body>
 
+</body>
 </html>

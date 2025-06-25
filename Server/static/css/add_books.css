@@ -1,79 +1,128 @@
- /*add_books*/ 
- body {
-     font-family: Arial, sans-serif;
-     background-color: #f4f4f4;
-     margin: 0;
-     padding: 0;
- }
+/* Base styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
- .nav {
-     background-color: #343a40;
-     color: white;
-     padding: 1rem;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
- }
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+}
 
- .nav h1 {
-     margin: 0;
-     font-size: 20px;
- }
+/* Navbar styling */
+.navbar {
+    background-color: #1e2a38;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
- .nav-buttons {
-     display: flex;
-     gap: 10px;
- }
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
- .nav-buttons a {
-     text-decoration: none;
-     background-color: #007bff;
-     color: white;
-     padding: 8px 16px;
-     border-radius: 4px;
-     transition: background-color 0.3s ease;
- }
+.logo {
+    color: #ffffff;
+    font-size: 1.5rem;
+}
 
- .nav-buttons a:hover {
-     background-color: #0056b3;
- }
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
 
- .form-container {
-     max-width: 500px;
-     margin: 40px auto;
-     padding: 30px;
-     background-color: #fff;
-     border-radius: 12px;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
- }
+.nav-links a:hover {
+    background-color: #0056b3;
+}
 
- h2 {
-     text-align: center;
-     margin-bottom: 20px;
- }
+/* Form styling */
+.form-wrapper {
+    max-width: 600px;
+    margin: 60px auto;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
- input,
- select,
- button {
-     width: 100%;
-     padding: 12px;
-     margin: 10px 0;
-     border-radius: 6px;
-     border: 1px solid #ccc;
- }
+.form-wrapper h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+}
 
- button {
-     background-color: #007BFF;
-     color: white;
-     font-weight: bold;
-     cursor: pointer;
-     border: none;
- }
+.book-form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
 
- button:hover {
-     background-color: #0056b3;
- }
+.book-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
 
- label {
-     font-weight: bold;
- }
+.book-form button {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.book-form button:hover {
+    background-color: #0056b3;
+}
+/* Navbar Styles */
+.navbar {
+  background-color: #1e2a38;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  background-color: #007bff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #0056b3;
+}

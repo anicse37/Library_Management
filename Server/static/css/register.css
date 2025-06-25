@@ -1,4 +1,4 @@
-/*register*/
+/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,20 +6,52 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f2f2f2;
-  height: 100vh;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #1e2a38;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
+
+.logo {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  background-color: #007bff;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #0056b3;
+}
+
+/* Form Container */
 .container {
   background-color: white;
   padding: 40px 30px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
+  margin: 40px auto;
 }
 
 .container h1 {
@@ -35,7 +67,7 @@ body {
 }
 
 .register-form label {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-weight: bold;
   color: #444;
 }
@@ -43,10 +75,10 @@ body {
 .register-form input,
 .register-form select {
   padding: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .register-form button {
@@ -62,5 +94,41 @@ body {
 }
 
 .register-form button:hover {
+  background-color: #0056b3;
+}
+/* Navbar Styles */
+.navbar {
+  background-color: #1e2a38;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 1.5rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 12px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  background-color: #007bff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover {
   background-color: #0056b3;
 }
