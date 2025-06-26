@@ -20,7 +20,7 @@ func SearchWithRole(ctx context.Context, db Database, role string, keyword strin
 
 	for res.Next() {
 		res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, user.Approved)
-		users.Users = append(users.Users, user)
+		users = append(users, user)
 	}
 	return users, nil
 }
@@ -40,7 +40,7 @@ func SearchBook(ctx context.Context, db Database, keyword string) ListBooks {
 
 	for rows.Next() {
 		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
-		books.Book = append(books.Book, book)
+		books = append(books, book)
 	}
 	return books
 }
@@ -59,7 +59,7 @@ func SearchBorrowedBook(ctx context.Context, db Database, keyword string) ListBo
 
 	for rows.Next() {
 		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
-		books.Book = append(books.Book, book)
+		books = append(books, book)
 	}
 	return books
 }

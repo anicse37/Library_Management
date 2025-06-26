@@ -16,9 +16,6 @@ type Database struct {
 	Files Library
 	DB    *sql.DB
 }
-type ListBooks struct {
-	Book []Book
-}
 type Book struct {
 	Id          int
 	Name        string
@@ -27,6 +24,7 @@ type Book struct {
 	Description string
 	Available   int
 }
+type ListBooks []Book
 
 type User struct {
 	Name     string
@@ -35,9 +33,8 @@ type User struct {
 	Role     string
 	Approved bool
 }
-type ListUser struct {
-	Users []User
-}
+type ListUser []User
+
 type Borrowed_Book struct {
 	Id            int
 	User_id       string
@@ -45,8 +42,15 @@ type Borrowed_Book struct {
 	Borrow_Date   time.Time
 	Returned_Date time.Time
 }
-type ListBorrowed_Books struct {
-	Borrowed_Books []Borrowed_Book
+type ListBorrowed_Books []Borrowed_Book
+
+type BorrowedBookDisplay struct {
+	BorrowID     int
+	BookID       int
+	BookName     string
+	Author       string
+	BorrowDate   time.Time
+	ReturnedDate *time.Time
 }
 
 const (

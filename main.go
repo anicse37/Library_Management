@@ -17,5 +17,4 @@ func main() {
 		Approved: true,
 	}
 	router.Router(dns, SuperAdmin)
-
 }

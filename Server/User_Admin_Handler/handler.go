@@ -83,7 +83,6 @@ func RemoveAdminHandler(ctx context.Context, db library.Database) http.HandlerFu
 		r.ParseForm()
 		admin := r.FormValue("admin_id")
 		queries.RemoveAdmin(ctx, db, admin)
-		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
 	}
 }
@@ -92,14 +91,14 @@ func RemoveUserHandler(ctx context.Context, db library.Database) http.HandlerFun
 		r.ParseForm()
 		user := r.FormValue("user_id")
 		queries.RemoveUser(ctx, db, user)
-		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/all_users", http.StatusSeeOther)
 	}
 }
 func RemoveBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
-		book := r.FormValue("book_id")
+		book, _ := strconv.Atoi(r.FormValue("book_id"))
+
 		queries.RemoveBooks(ctx, db, book)
 		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}

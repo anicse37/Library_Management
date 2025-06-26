@@ -54,7 +54,7 @@
                 </tr>
             </thead>
             <tbody id="booksBody">
-                {{range .Book.Book}}
+                {{range .Book}}
                 <tr>
                     <td>{{.Name}}</td>
                     <td>{{.Author}}</td>
@@ -72,7 +72,7 @@
 
                         {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
                         <form method="POST" action="/remove_books">
-                            <input type="hidden" name="{{if eq $.Role "superadmin"}}book_id{{else}}id{{end}}" value="{{.Id}}">
+                            <input type="hidden" name="book_id" value="{{.Id}}">
                             <button type="submit" class="remove_btn">Remove</button>
                         </form>
                         {{end}}

@@ -52,7 +52,7 @@ func ScanUsers(result *sql.Rows) *ListUser {
 	user := User{}
 	for result.Next() {
 		result.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
-		users.Users = append(users.Users, user)
+		users = append(users, user)
 	}
 	return &users
 }

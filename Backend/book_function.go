@@ -22,8 +22,8 @@ func GetAllBorrowedBooks(ctx context.Context, db Database, userid string) ListBo
 	}
 	var borrowed ListBooks
 	borrowed_books := ScanBorrowedBooks(result)
-	for _, j := range borrowed_books.Borrowed_Books {
-		borrowed.Book = append(borrowed.Book, GetSingleBook(ctx, db, j.Book_id))
+	for _, j := range borrowed_books {
+		borrowed = append(borrowed, GetSingleBook(ctx, db, j.Book_id))
 	}
 	return borrowed
 }
@@ -44,7 +44,7 @@ func ScanBooks(result *sql.Rows) ListBooks {
 	book := Book{}
 	for result.Next() {
 		result.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
-		books.Book = append(books.Book, book)
+		books = append(books, book)
 	}
 	return books
 }
@@ -56,7 +56,7 @@ func ScanBorrowedBooks(rows *sql.Rows) ListBorrowed_Books {
 		if err := rows.Scan(&b.Id, &b.User_id, &b.Book_id, &b.Borrow_Date, &b.Returned_Date); err != nil {
 			continue
 		}
-		all.Borrowed_Books = append(all.Borrowed_Books, b)
+		all = append(all, b)
 	}
 	return all
 }
