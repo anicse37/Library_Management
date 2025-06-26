@@ -10,8 +10,16 @@
     <header>
         <h2>Borrowed Books</h2>
         <div class="nav-buttons">
-            <button onclick="location.href='/dashboard'">Home</button>
-            <button onclick="location.href='/logout'">Logout</button>
+            {{if eq $.Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "user"}}
+                <a href="/books">Home</a>
+                {{end}}
+                <a href="/logout">Logout</a>
         </div>
     </header>
 
@@ -25,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-            {{range .Borrowed_Books}}
+            {{range .Book}}
             <tr>
                 <td>{{.Book_id}}</td>
                 <td>{{.BookName}}</td>

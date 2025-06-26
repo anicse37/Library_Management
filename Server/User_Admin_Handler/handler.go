@@ -74,7 +74,6 @@ func ApproveHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 		admin := r.FormValue("admin_id")
 		fmt.Println(admin)
 		queries.ApproveAdmin(ctx, db, admin)
-		time.Sleep(2 * time.Second)
 		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
 	}
 }
@@ -98,7 +97,6 @@ func RemoveBooksHandler(ctx context.Context, db library.Database) http.HandlerFu
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		book, _ := strconv.Atoi(r.FormValue("book_id"))
-
 		queries.RemoveBooks(ctx, db, book)
 		http.Redirect(w, r, "/books", http.StatusSeeOther)
 	}

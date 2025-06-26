@@ -46,30 +46,24 @@ func BorrowedBooksHandle(ctx context.Context, db library.Database) http.HandlerF
 	return func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
-			search := r.URL.Query().Get("search")
 			var books library.ListBooks
 
 			session, _ := session.Store.Get(r, "very-secret-key")
 			userid, _ := session.Values[library.SessionKeyUserId].(string)
 
-			if search != "" {
-				books = library.SearchBorrowedBook(ctx, db, search)
-			} else {
-				books = queries.GetAllBorrowedBooks(ctx, db, userid)
-			}
+			books = queries.GetAllBorrowedBooks(ctx, db, userid)
+
 			role := "user"
 			if rRole, ok := session.Values[library.SessionKeyRole].(string); ok {
 				role = rRole
 			}
 
 			data := struct {
-				Book  library.ListBooks
-				Query string
-				Role  string
+				Book library.ListBooks
+				Role string
 			}{
-				Book:  books,
-				Query: search,
-				Role:  role,
+				Book: books,
+				Role: role,
 			}
 			server.RenderTemplate(w, "borrowed_books.html", data)
 		default:

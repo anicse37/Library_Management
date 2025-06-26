@@ -11,7 +11,12 @@
         <div class="navbar-container">
             <h1 class="logo">Library Management</h1>
             <div class="nav-links">
-                <a href="/home">Home</a>
+               {{if eq $.Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+                {{end}}
                 <a href="/logout">Logout</a>
             </div>
         </div>

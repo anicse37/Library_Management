@@ -33,8 +33,8 @@ func Router(dns string, SuperAdmin library.User) {
 	router.HandleFunc("/books", handler.RequireLogin(books.BooksHandle(ctx, db)))
 	router.HandleFunc("/add_book", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.AddBooksHandler(ctx, db))))
 	router.HandleFunc("/remove_books", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", handler.RemoveBooksHandler(ctx, db))))
-	router.HandleFunc("/your_books", handler.RequireLogin(books.BorrowedBooksHandle(ctx, db)))
-	router.HandleFunc("/borrow", handler.RequireLogin(handler.BorrowHandler(ctx, db)))
+	router.HandleFunc("/your_books", handler.RequireLogin(handler.RequireRole("user", handler.BorrowHandler(ctx, db))))
+	router.HandleFunc("/borrow", handler.RequireLogin(handler.RequireRole("user", handler.BorrowHandler(ctx, db))))
 
 	router.HandleFunc("/home", handler.RequireLogin(handler.RequireRole("user", server.UserHandler(ctx, db))))
 
