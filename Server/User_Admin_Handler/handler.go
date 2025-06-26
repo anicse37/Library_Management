@@ -115,6 +115,25 @@ func BorrowHandler(ctx context.Context, db library.Database) http.HandlerFunc {
 		}
 		queries.BorrowBook(ctx, db, book)
 		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
+		BorrowedBooksHandler(ctx, db)
+	}
+}
+func BorrowedBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		session, _ := session.Store.Get(r, "very-secret-key")
+		user_id, _ := session.Values[library.SessionKeyUserId].(string)
+		role, _ := session.Values[library.SessionKeyRole].(string)
+
+		books := queries.BorrowedBooks(ctx, db, user_id)
+		data := struct {
+			Book library.ListBorrowedBookDisplay
+			Role string
+		}{
+			Book: books,
+			Role: role,
+		}
+		server.RenderTemplate(w, "borrowed_books.html", data)
 	}
 }
 func AddBooksHandler(ctx context.Context, db library.Database) http.HandlerFunc {

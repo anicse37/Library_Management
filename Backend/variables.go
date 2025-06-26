@@ -46,12 +46,14 @@ type ListBorrowed_Books []Borrowed_Book
 
 type BorrowedBookDisplay struct {
 	BorrowID     int
+	UserId       string
 	BookID       int
 	BookName     string
 	Author       string
 	BorrowDate   time.Time
 	ReturnedDate *time.Time
 }
+type ListBorrowedBookDisplay []BorrowedBookDisplay
 
 const (
 	SessionKeyUsername = "username"

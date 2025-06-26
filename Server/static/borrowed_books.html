@@ -28,6 +28,7 @@
             <tr>
                 <th>Book ID</th>
                 <th>Title</th>
+                <th>Author</th>
                 <th>Borrowed Date</th>
                 <th>Return Date</th>
             </tr>
@@ -35,12 +36,13 @@
         <tbody>
             {{range .Book}}
             <tr>
-                <td>{{.Book_id}}</td>
+                <td>{{.BookID}}</td>
                 <td>{{.BookName}}</td>
-                <td>{{.Borrow_Date.Format "2006-01-02"}}</td>
+                <td>{{.Author}}</td>
+                <td>{{.BorrowDate.Format "2006-01-02"}}</td>
                 <td>
-                    {{if .Returned_Date}}
-                        {{.Returned_Date.Format "2006-01-02"}}
+                    {{if .ReturnedDate}}
+                        {{.ReturnedDate.Format "2006-01-02"}}
                     {{else}}Not Returned{{end}}
                 </td>
             </tr>

@@ -54,13 +54,3 @@ func RemoveUser(ctx context.Context, db library.Database, id string) {
 	db.DB.ExecContext(ctx, `DELETE FROM borrowed_books WHERE id = ?`, id)
 	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
 }
-func RemoveBooks(ctx context.Context, db library.Database, id int) {
-	db.DB.ExecContext(ctx, `DELETE FROM borrowed_books WHERE id = ?`, id)
-	db.DB.ExecContext(ctx, `DELETE FROM books WHERE id = ?`, id)
-}
-func AddBooks(ctx context.Context, db library.Database, book library.Book) {
-	InsertBooks(ctx, db, book)
-}
-func BorrowBook(ctx context.Context, db library.Database, book library.Borrowed_Book) {
-	InsertBorrowedBooks(ctx, db, book)
-}
