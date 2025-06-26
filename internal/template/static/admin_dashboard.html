@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="services.tatic/css/admin_dashboard.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <h1 class="logo">Library Management</h1>
+      <div class="nav-links">
+        <a href="/admin/dashboard">Home</a>
+        <a href="/logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="dashboard-wrapper">
+    <h2>Admin Dashboard</h2>
+    <p>Welcome, {{.Name}}! You can perform the following actions:</p>
+
+    <div class="dashboard-actions">
+      <a href="/books">Manage Books</a>
+      <a href="/all_users">All Users</a>
+    </div>
+  </main>
+
+</body>
+</html>

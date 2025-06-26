@@ -5,26 +5,26 @@ import (
 	"net/http"
 	"time"
 
-	library "github.com/anicse37/Library_Management/Backend"
-	queries "github.com/anicse37/Library_Management/Backend/Queries"
-	server "github.com/anicse37/Library_Management/Server"
-	books "github.com/anicse37/Library_Management/Server/Books"
-	dashboard "github.com/anicse37/Library_Management/Server/Dashboard"
-	authentication "github.com/anicse37/Library_Management/Server/Login_Register"
-	handler "github.com/anicse37/Library_Management/Server/User_Admin_Handler"
+	server "github.com/anicse37/Library_Management/internal/handlers"
+	books "github.com/anicse37/Library_Management/internal/handlers/Books"
+	dashboard "github.com/anicse37/Library_Management/internal/handlers/Dashboard"
+	authentication "github.com/anicse37/Library_Management/internal/handlers/Login_Register"
+	handler "github.com/anicse37/Library_Management/internal/handlers/User_Admin_Handler"
+	"github.com/anicse37/Library_Management/internal/models"
+	librarySQL "github.com/anicse37/Library_Management/internal/repo"
 )
 
-func Router(dns string, SuperAdmin library.User) {
-	db := library.Database{}
-	db.DB = StartDB(dns)
+func Router(dns string, SuperAdmin models.User) {
+	db := models.Database{}
+	db.DB = librarySQL.StartDB(dns)
 	defer db.DB.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
 	defer cancel()
-	queries.InsertSuperAdmin(ctx, db, SuperAdmin)
+	// librarySQL.InsertSuperAdmin(ctx, db, SuperAdmin)
 	router := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("Server/static/css"))
-	router.Handle("/Server/static/css/", http.StripPrefix("/Server/static/css/", fs))
+	fs := http.FileServer(http.Dir("internal/template/static/css"))
+	router.Handle("/internal/template/static/css/", http.StripPrefix("/internal/template/static/css/", fs))
 
 	router.HandleFunc("/register", authentication.RegisterHandler(ctx, db))
 	router.HandleFunc("/login", authentication.LoginHandler(ctx, db))
@@ -48,4 +48,5 @@ func Router(dns string, SuperAdmin library.User) {
 	router.HandleFunc("/admin/dashboard", handler.RequireLogin(handler.RequireRole("admin", dashboard.AdminDashboard(ctx, db))))
 	router.HandleFunc("/superadmin/dashboard", handler.RequireLogin(handler.RequireRole("superadmin", dashboard.SuperAdminDashboard(ctx, db))))
 	http.ListenAndServe(":5050", router)
+
 }

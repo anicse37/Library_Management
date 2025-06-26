@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link rel="stylesheet" href="/internal/template/static/css/books.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-container">
+            <h1 class="logo">Library Management</h1>
+            <div class="nav-links">
+                {{if eq $.Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "user"}}
+                <a href="/books">Home</a>
+                {{end}}
+                <a href="/logout">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <div class="top-controls">
+            <h2>Available Books</h2>
+            {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
+            <button onclick="location.href='/add_book'" class="add-book-btn">Add Book</button>
+            {{end}}
+        </div>
+
+        <div class="search-bar">
+            <form method="GET" action="/books">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or author..." value="{{.Query}}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <table id="booksTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Description</th>
+                    <th>Available</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="booksBody">
+                {{range .Book}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Author}}</td>
+                    <td>{{.Year}}</td>
+                    <td>{{.Description}}</td>
+                    <td>{{.Available}}</td>
+
+                    <td>
+                        {{if eq $.Role "user"}}
+                        <form method="POST" action="/borrow">
+                            <input type="hidden" name="book_id" value="{{.Id}}">
+                            <button type="submit" class="borrow-btn">Borrow</button>
+                        </form>
+                        {{end}}
+
+                        {{if or (eq $.Role "admin") (eq $.Role "superadmin")}}
+                        <form method="POST" action="/remove_books">
+                            <input type="hidden" name="book_id" value="{{.Id}}">
+                            <button type="submit" class="remove_btn">Remove</button>
+                        </form>
+                        {{end}}
+                    </td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

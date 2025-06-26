@@ -3,11 +3,13 @@ package library
 import (
 	"context"
 	"log"
+
+	"github.com/anicse37/Library_Management/internal/models"
 )
 
-func SearchWithRole(ctx context.Context, db Database, role string, keyword string) (ListUser, error) {
-	users := ListUser{}
-	user := User{}
+func SearchWithRole(ctx context.Context, db models.Database, role string, keyword string) (models.ListUser, error) {
+	users := models.ListUser{}
+	user := models.User{}
 
 	query := `SELECT * FROM user WHERE (name LIKE ? OR id LIKE ?) AND role = ?`
 	likePattern := "%" + keyword + "%"
@@ -25,9 +27,9 @@ func SearchWithRole(ctx context.Context, db Database, role string, keyword strin
 	return users, nil
 }
 
-func SearchBook(ctx context.Context, db Database, keyword string) ListBooks {
-	books := ListBooks{}
-	book := Book{}
+func SearchBook(ctx context.Context, db models.Database, keyword string) models.ListBooks {
+	books := models.ListBooks{}
+	book := models.Book{}
 
 	query := `SELECT * FROM books WHERE name LIKE ? OR author LIKE ?;`
 	likePattern := "%" + keyword + "%"
@@ -44,9 +46,9 @@ func SearchBook(ctx context.Context, db Database, keyword string) ListBooks {
 	}
 	return books
 }
-func SearchBorrowedBook(ctx context.Context, db Database, keyword string) ListBooks {
-	books := ListBooks{}
-	book := Book{}
+func SearchBorrowedBook(ctx context.Context, db models.Database, keyword string) models.ListBooks {
+	books := models.ListBooks{}
+	book := models.Book{}
 
 	query := `SELECT * FROM borrowed_books WHERE name LIKE ? OR author LIKE ?;`
 	likePattern := "%" + keyword + "%"
