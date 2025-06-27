@@ -13,7 +13,12 @@
         <div class="navbar-container">
             <h1 class="logo">Library Management</h1>
             <div class="nav-links">
-                <a href="manage_">Home</a>
+                {{if eq $.Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+                {{end}}
+                {{if eq $.Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+                {{end}}
                 <a href="/logout">Logout</a>
             </div>
         </div>
@@ -24,7 +29,8 @@
 
         <div class="search-bar">
             <form class="search-bar" method="GET" action="/all_users">
-                <input type="text" name="search" id="searchInput" placeholder="Search by name or email..." value="{{.Query}}">
+                <input type="text" name="search" id="searchInput" placeholder="Search by name or email..."
+                    value="{{.Query}}">
                 <button type="submit">Search</button>
             </form>
         </div>

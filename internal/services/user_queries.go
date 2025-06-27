@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 
-	library "github.com/anicse37/Library_Management/Backend"
 	"github.com/anicse37/Library_Management/internal/models"
 	librarySQL "github.com/anicse37/Library_Management/internal/repo"
 )
@@ -34,15 +33,6 @@ func GetAdminsApproved(ctx context.Context, db models.Database) (models.ListUser
 func GetAdminsNotApproved(ctx context.Context, db models.Database) (models.ListUser, error) {
 	users, err := librarySQL.GetAdminsWithApprovals(ctx, db, 0)
 	return users, err
-}
-
-func SearchUsers(ctx context.Context, db models.Database, keyword string) (models.ListUser, error) {
-	user, err := library.SearchWithRole(ctx, db, models.RoleUser, keyword)
-	return user, err
-}
-func SearchAdmins(ctx context.Context, db models.Database, keyword string) (models.ListUser, error) {
-	user, err := library.SearchWithRole(ctx, db, models.RoleAdmin, keyword)
-	return user, err
 }
 
 func ApproveAdmin(ctx context.Context, db models.Database, id string) {

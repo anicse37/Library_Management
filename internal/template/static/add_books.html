@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Add Book</title>
-    <link rel="stylesheet" href="/internal/template/static/css/add_books.css">    
+    <link rel="stylesheet" href="/internal/template/static/css/add_books.css">
 </head>
+
 <body>
 
     <nav class="navbar">
         <div class="navbar-container">
             <h1 class="logo">Library Management</h1>
             <div class="nav-links">
-               {{if eq $.Role "superadmin"}}
+                {{if eq $.Role "superadmin"}}
                 <a href="/superadmin/dashboard">Home</a>
                 {{end}}
                 {{if eq $.Role "admin"}}
@@ -45,4 +47,5 @@
     </main>
 
 </body>
+
 </html>

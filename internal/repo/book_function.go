@@ -3,40 +3,47 @@ package librarySQL
 import (
 	"context"
 	"database/sql"
-	"log"
 
 	"github.com/anicse37/Library_Management/internal/models"
 )
 
-func GetAllBooks(ctx context.Context, db models.Database) models.ListBooks {
+func GetAllBooks(ctx context.Context, db models.Database) (models.ListBooks, error) {
+	books := models.ListBooks{}
 	result, err := db.DB.QueryContext(ctx, "SELECT *FROM books;")
 	if err != nil {
-		log.Fatalf("Error Getting Data: %v", err)
+		return books, models.ErrorGettingBooks
 	}
-	books := ScanBooks(result)
-	return books
+	books = ScanBooks(result)
+	return books, nil
 }
 
-func GetAllBorrowedBooks(ctx context.Context, db models.Database, userid string) models.ListBooks {
+func GetAllBorrowedBooks(ctx context.Context, db models.Database, userid string) (models.ListBooks, error) {
+	var borrowed models.ListBooks
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE user_id = ?;", userid)
 	if err != nil {
-		log.Fatalf("Error Getting Data: %v", err)
+		return borrowed, models.ErrorGettingBooks
 	}
-	var borrowed models.ListBooks
 	borrowed_books := ScanBorrowedBooks(result)
 	for _, j := range borrowed_books {
-		borrowed = append(borrowed, GetSingleBook(ctx, db, j.Book_id))
+		book, err := GetSingleBook(ctx, db, j.Book_id)
+		if err != nil {
+			return borrowed, models.ErrorGettingBooks
+		}
+		borrowed = append(borrowed, book)
 	}
-	return borrowed
+	return borrowed, nil
 }
 
-func GetSingleBook(ctx context.Context, db models.Database, book_id int) models.Book {
-	result, _ := db.DB.QueryContext(ctx, "SELECT * FROM books where id = ?;", book_id)
+func GetSingleBook(ctx context.Context, db models.Database, book_id int) (models.Book, error) {
+	result, err := db.DB.QueryContext(ctx, "SELECT * FROM books where id = ?;", book_id)
 	book := models.Book{}
+	if err != nil {
+		return book, models.ErrorGettingBooks
+	}
 	for result.Next() {
 		result.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
 	}
-	return book
+	return book, nil
 
 }
 

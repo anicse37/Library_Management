@@ -1,8 +1,7 @@
-package library
+package librarySQL
 
 import (
 	"context"
-	"log"
 
 	"github.com/anicse37/Library_Management/internal/models"
 )
@@ -15,8 +14,7 @@ func SearchWithRole(ctx context.Context, db models.Database, role string, keywor
 	likePattern := "%" + keyword + "%"
 	res, err := db.DB.QueryContext(ctx, query, likePattern, likePattern, role)
 	if err != nil {
-		log.Printf("Error while searching: %v", err)
-		return users, err
+		return users, models.ErrorScanningUsers
 	}
 	defer res.Close()
 
@@ -26,17 +24,14 @@ func SearchWithRole(ctx context.Context, db models.Database, role string, keywor
 	}
 	return users, nil
 }
-
-func SearchBook(ctx context.Context, db models.Database, keyword string) models.ListBooks {
+func SearchBook(ctx context.Context, db models.Database, keyword string) (models.ListBooks, error) {
 	books := models.ListBooks{}
 	book := models.Book{}
-
 	query := `SELECT * FROM books WHERE name LIKE ? OR author LIKE ?;`
 	likePattern := "%" + keyword + "%"
 	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
 	if err != nil {
-		log.Printf("Error while searching: %v", err)
-		return books
+		return books, models.ErrorGettingBooks
 	}
 	defer rows.Close()
 
@@ -44,24 +39,5 @@ func SearchBook(ctx context.Context, db models.Database, keyword string) models.
 		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
 		books = append(books, book)
 	}
-	return books
-}
-func SearchBorrowedBook(ctx context.Context, db models.Database, keyword string) models.ListBooks {
-	books := models.ListBooks{}
-	book := models.Book{}
-
-	query := `SELECT * FROM borrowed_books WHERE name LIKE ? OR author LIKE ?;`
-	likePattern := "%" + keyword + "%"
-	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
-	if err != nil {
-		log.Printf("Error while searching: %v", err)
-		return books
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		rows.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)
-		books = append(books, book)
-	}
-	return books
+	return books, nil
 }

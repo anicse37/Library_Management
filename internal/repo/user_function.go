@@ -3,21 +3,15 @@ package librarySQL
 import (
 	"context"
 	"database/sql"
-	"errors"
 
 	"github.com/anicse37/Library_Management/internal/models"
-)
-
-var (
-	ErrorScanningUser  = errors.New("error scanning user from database")
-	ErrorScanningUsers = errors.New("error scanning users from database")
 )
 
 func GetWithRoles(ctx context.Context, db models.Database, role string) (models.ListUser, error) {
 	users := &models.ListUser{}
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM user WHERE role = ?", role)
 	if err != nil {
-		return *users, ErrorScanningUsers
+		return *users, models.ErrorScanningUsers
 	}
 	defer result.Close()
 
@@ -28,7 +22,7 @@ func GetAdminsWithApprovals(ctx context.Context, db models.Database, approval in
 	users := &models.ListUser{}
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM user WHERE (role= 'admin') AND (approved = ?);", approval)
 	if err != nil {
-		return *users, ErrorScanningUsers
+		return *users, models.ErrorScanningUsers
 	}
 	defer result.Close()
 
@@ -42,7 +36,7 @@ func GetWithID(ctx context.Context, db models.Database, id string, role string) 
 
 	err := res.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
 	if err != nil {
-		return user, ErrorScanningUser
+		return user, models.ErrorScanningUser
 	}
 
 	return user, nil
@@ -56,5 +50,6 @@ func ScanUsers(result *sql.Rows) *models.ListUser {
 		result.Scan(&user.Name, &user.Id, &user.Role, &user.Password, &user.Approved)
 		users = append(users, user)
 	}
+
 	return &users
 }
