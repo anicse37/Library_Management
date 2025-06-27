@@ -1,14 +1,22 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	router "github.com/anicse37/Library_Management/Router"
 	"github.com/anicse37/Library_Management/internal/models"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
-const dns = "go_user:S3cur3P@ssw0rd@tcp(127.0.0.1:3306)/library_db?charset=utf8mb4&parseTime=true&loc=Local"
-
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	dns := os.Getenv("DNS")
+
 	SuperAdmin := models.User{
 		Id:       "MAU21UCS014",
 		Name:     "Super Admin",
