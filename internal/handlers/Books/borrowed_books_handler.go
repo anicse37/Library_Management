@@ -2,6 +2,7 @@ package books
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -69,6 +70,7 @@ func BorrowedBooksHandler(ctx context.Context, db models.Database) http.HandlerF
 		role, _ := session.Values[models.SessionKeyRole].(string)
 
 		books := queries.BorrowedBooks(ctx, db, user_id)
+
 		data := struct {
 			Book models.ListBorrowedBookDisplay
 			Role string
@@ -77,5 +79,18 @@ func BorrowedBooksHandler(ctx context.Context, db models.Database) http.HandlerF
 			Role: role,
 		}
 		template.RenderTemplate(w, "borrowed_books.html", data)
+	}
+}
+
+func ReturnBookHandler(ctx context.Context, db models.Database) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		book := r.FormValue("book_id")
+		fmt.Println(book)
+		err := queries.ReturnBorrowedBook(ctx, db, book)
+		if err != nil {
+			fmt.Print("Gadbad hai baba")
+		}
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 	}
 }

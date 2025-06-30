@@ -27,6 +27,7 @@ func RouterEndpoints(ctx context.Context, db models.Database) *http.ServeMux {
 	router.HandleFunc("/remove_books", handler.RequireLogin(handler.RequireTwoRoles("admin", "superadmin", books.RemoveBooksHandler(ctx, db))))
 	router.HandleFunc("/your_books", handler.RequireLogin(handler.RequireRole("user", books.BorrowedBooksHandler(ctx, db))))
 	router.HandleFunc("/borrow", handler.RequireLogin(handler.RequireRole("user", books.BorrowHandler(ctx, db))))
+	// router.HandleFunc("/return_book", handler.RequireLogin(handler.RequireRole("user", books.ReturnBookHandler(ctx, db))))
 
 	router.HandleFunc("/home", handler.RequireLogin(handler.RequireRole("user", server.UserHandler(ctx, db))))
 

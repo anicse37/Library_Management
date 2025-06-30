@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Borrowed Books</title>
     <link rel="stylesheet" href="/internal/template/static/css/borrowed_books.css">
 </head>
+
 <body>
 
     <header>
         <h2>Borrowed Books</h2>
         <div class="nav-buttons">
             {{if eq $.Role "superadmin"}}
-                <a href="/superadmin/dashboard">Home</a>
-                {{end}}
-                {{if eq $.Role "admin"}}
-                <a href="/admin/dashboard">Home</a>
-                {{end}}
-                {{if eq $.Role "user"}}
-                <a href="/books">Home</a>
-                {{end}}
-                <a href="/logout">Logout</a>
+            <a href="/superadmin/dashboard">Home</a>
+            {{end}}
+            {{if eq $.Role "admin"}}
+            <a href="/admin/dashboard">Home</a>
+            {{end}}
+            {{if eq $.Role "user"}}
+            <a href="/home">Home</a>
+            {{end}}
+            <a href="/logout">Logout</a>
         </div>
     </header>
 
@@ -31,6 +33,7 @@
                 <th>Author</th>
                 <th>Borrowed Date</th>
                 <th>Return Date</th>
+                <th>Return</th>
             </tr>
         </thead>
         <tbody>
@@ -42,9 +45,17 @@
                 <td>{{.BorrowDate.Format "2006-01-02"}}</td>
                 <td>
                     {{if .ReturnedDate}}
-                        {{.ReturnedDate.Format "2006-01-02"}}
+                    {{.ReturnedDate.Format "2006-01-02"}}
                     {{else}}Not Returned{{end}}
                 </td>
+                {{if or $.Role "user"}}
+                <td>
+                    <form method="POST" action="/return_book">
+                        <input type="hidden" name="book_id" value="{{.BookID}}">
+                        <button type="submit" class="return_btn">Remove</button>
+                    </form>
+                </td>
+                {{end}}
             </tr>
             {{else}}
             <tr>
@@ -55,4 +66,5 @@
     </table>
 
 </body>
+
 </html>

@@ -29,9 +29,14 @@ func AddBorrowBook(ctx context.Context, db models.Database, book models.Borrowed
 	err := librarySQL.InsertBorrowedBooks(ctx, db, book)
 	return err
 }
+
+func ReturnBorrowedBook(ctx context.Context, db models.Database, book string) error {
+	err := librarySQL.DeleteBorrowedBook(ctx, db, book)
+	return err
+}
 func BorrowedBooks(ctx context.Context, db models.Database, user_id string) models.ListBorrowedBookDisplay {
 	var books models.ListBorrowedBookDisplay
-	result, _ := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE user_id = ?;", user_id)
+	result, _ := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE (user_id = ?) AND returned_date IS NULL;", user_id)
 	book := models.BorrowedBookDisplay{}
 	for result.Next() {
 		result.Scan(&book.BorrowID, &book.UserId, &book.BookID, &book.BorrowDate, &book.ReturnedDate)
