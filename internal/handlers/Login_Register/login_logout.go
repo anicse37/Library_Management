@@ -33,7 +33,7 @@ func LoginHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 			}
 
 			if !user.Approved {
-				http.Error(w, "Account not approved by admin", http.StatusForbidden)
+				errors_package.SetError(errors_package.ErrorAdminNotAllowed)
 				http.Redirect(w, r, "/error", http.StatusSeeOther)
 				return
 			}
