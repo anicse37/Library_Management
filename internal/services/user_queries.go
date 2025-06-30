@@ -43,6 +43,6 @@ func RemoveAdmin(ctx context.Context, db models.Database, id string) {
 	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
 }
 func RemoveUser(ctx context.Context, db models.Database, id string) {
-	db.DB.ExecContext(ctx, `DELETE FROM borrowed_books WHERE id = ?`, id)
+	db.DB.ExecContext(ctx, `DELETE FROM borrowed_books WHERE user_id = ?`, id)
 	db.DB.ExecContext(ctx, `DELETE FROM user WHERE id = ?`, id)
 }
