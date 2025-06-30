@@ -1,4 +1,4 @@
-package models
+package errors_package
 
 import "errors"
 
@@ -13,4 +13,11 @@ var (
 	ErrorWhileRemoveing = errors.New("error removing book from database")
 
 	ErrorGettingBooks = errors.New("error getting books from database")
+
+	ErrorUnauthorized    = errors.New("unauthorized")
+	ErrorInvalidUser     = errors.New("invalid user id")
+	ErrorInvalidPassword = errors.New("invalid password")
+
+	ErrorUserAlreadyExist  = errors.New("user already exists")
+	ErrorCanNotRemoveBooks = errors.New("can not remove books")
 )

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Error</title>
+    <link rel="stylesheet" href="/internal/template/static/css/error.css" />
+    <style>
+        /* Optional inline styling if you have no separate CSS yet */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        nav {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        nav .nav-buttons a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 15px;
+            background-color: #0275d8;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        nav .nav-buttons a:hover {
+            background-color: #025aa5;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 80px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .error-message {
+            color: #d9534f;
+            font-size: 20px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <strong>Library Management</strong>
+        </div>
+        <div class="nav-buttons">
+            {{if eq .Role "superadmin"}}
+                <a href="/superadmin/dashboard">Home</a>
+            {{end}}
+            {{if eq .Role "admin"}}
+                <a href="/admin/dashboard">Home</a>
+            {{end}}
+            {{if eq .Role "user"}}
+                <a href="/home">Home</a>
+            {{end}}
+            <a href="/logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="error-container">
+        <h2>Error Occurred</h2>
+        <p class="error-message">{{.Message}}</p>
+    </div>
+</body>
+</html>

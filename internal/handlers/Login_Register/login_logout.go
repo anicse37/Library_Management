@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	session "github.com/anicse37/Library_Management/internal/middleware"
 	"github.com/anicse37/Library_Management/internal/models"
 	queries "github.com/anicse37/Library_Management/internal/services"
@@ -20,17 +21,20 @@ func LoginHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 			password := r.FormValue(models.SessionKeyPassword)
 			user, err := queries.GetUserWithId(ctx, db, id)
 			if err != nil {
-				http.Error(w, "Invalid ID", http.StatusUnauthorized)
+				errors_package.SetError(errors_package.ErrorInvalidUser)
+				http.Redirect(w, r, "/error", http.StatusSeeOther)
 				return
 			}
 
 			if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-				http.Error(w, err.Error(), http.StatusUnauthorized)
+				errors_package.SetError(errors_package.ErrorInvalidPassword)
+				http.Redirect(w, r, "/error", http.StatusSeeOther)
 				return
 			}
 
 			if !user.Approved {
 				http.Error(w, "Account not approved by admin", http.StatusForbidden)
+				http.Redirect(w, r, "/error", http.StatusSeeOther)
 				return
 			}
 

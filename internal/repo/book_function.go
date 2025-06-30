@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	"github.com/anicse37/Library_Management/internal/models"
 )
 
@@ -11,7 +12,7 @@ func GetAllBooks(ctx context.Context, db models.Database) (models.ListBooks, err
 	books := models.ListBooks{}
 	result, err := db.DB.QueryContext(ctx, "SELECT *FROM books;")
 	if err != nil {
-		return books, models.ErrorGettingBooks
+		return books, errors_package.ErrorGettingBooks
 	}
 	books = ScanBooks(result)
 	return books, nil
@@ -21,13 +22,13 @@ func GetAllBorrowedBooks(ctx context.Context, db models.Database, userid string)
 	var borrowed models.ListBooks
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE user_id = ?;", userid)
 	if err != nil {
-		return borrowed, models.ErrorGettingBooks
+		return borrowed, errors_package.ErrorGettingBooks
 	}
 	borrowed_books := ScanBorrowedBooks(result)
 	for _, j := range borrowed_books {
 		book, err := GetSingleBook(ctx, db, j.Book_id)
 		if err != nil {
-			return borrowed, models.ErrorGettingBooks
+			return borrowed, errors_package.ErrorGettingBooks
 		}
 		borrowed = append(borrowed, book)
 	}
@@ -38,7 +39,7 @@ func GetSingleBook(ctx context.Context, db models.Database, book_id int) (models
 	result, err := db.DB.QueryContext(ctx, "SELECT * FROM books where id = ?;", book_id)
 	book := models.Book{}
 	if err != nil {
-		return book, models.ErrorGettingBooks
+		return book, errors_package.ErrorGettingBooks
 	}
 	for result.Next() {
 		result.Scan(&book.Id, &book.Name, &book.Author, &book.Year, &book.Description, &book.Available)

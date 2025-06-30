@@ -3,6 +3,7 @@ package librarySQL
 import (
 	"context"
 
+	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	"github.com/anicse37/Library_Management/internal/models"
 )
 
@@ -14,7 +15,7 @@ func SearchWithRole(ctx context.Context, db models.Database, role string, keywor
 	likePattern := "%" + keyword + "%"
 	res, err := db.DB.QueryContext(ctx, query, likePattern, likePattern, role)
 	if err != nil {
-		return users, models.ErrorScanningUsers
+		return users, errors_package.ErrorScanningUsers
 	}
 	defer res.Close()
 
@@ -31,7 +32,7 @@ func SearchBook(ctx context.Context, db models.Database, keyword string) (models
 	likePattern := "%" + keyword + "%"
 	rows, err := db.DB.QueryContext(ctx, query, likePattern, likePattern)
 	if err != nil {
-		return books, models.ErrorGettingBooks
+		return books, errors_package.ErrorGettingBooks
 	}
 	defer rows.Close()
 

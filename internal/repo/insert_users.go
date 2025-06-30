@@ -16,17 +16,21 @@ func InsertSuperAdmin(ctx context.Context, db models.Database, user models.User)
 	}
 }
 
-func InsertUsers(ctx context.Context, db models.Database, user models.User) {
+func InsertUsers(ctx context.Context, db models.Database, user models.User) error {
 	if user.Role == "user" {
 		user.Approved = true
 	} else {
 		user.Approved = false
 	}
 
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 
 	if _, err := db.DB.ExecContext(ctx, `INSERT INTO user
 	VALUES (?,?,?,?,?);`, user.Name, user.Id, user.Role, hashedPassword, user.Approved); err != nil {
-		fmt.Printf("Error While Inserting: %v\n", err)
+		return err
 	}
+	return nil
 }

@@ -2,11 +2,11 @@ package books
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
+	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	session "github.com/anicse37/Library_Management/internal/middleware"
 	"github.com/anicse37/Library_Management/internal/models"
 	queries "github.com/anicse37/Library_Management/internal/services"
@@ -23,7 +23,8 @@ func BorrowedBooksHandle(ctx context.Context, db models.Database) http.HandlerFu
 
 			books, err := queries.GetAllBorrowedBooks(ctx, db, userid)
 			if err != nil {
-				//do something
+				errors_package.SetError(err)
+				http.Redirect(w, r, "/error", http.StatusSeeOther)
 			}
 
 			role := "user"
@@ -57,7 +58,11 @@ func BorrowHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 			Book_id:     book_id,
 			Borrow_Date: time.Now(),
 		}
-		queries.AddBorrowBook(ctx, db, book)
+		err := queries.AddBorrowBook(ctx, db, book)
+		if err != nil {
+			errors_package.SetError(err)
+			http.Redirect(w, r, "/error", http.StatusSeeOther)
+		}
 		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
 		BorrowedBooksHandler(ctx, db)
 	}
@@ -86,11 +91,11 @@ func ReturnBookHandler(ctx context.Context, db models.Database) http.HandlerFunc
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		book := r.FormValue("book_id")
-		fmt.Println(book)
 		err := queries.ReturnBorrowedBook(ctx, db, book)
 		if err != nil {
-			fmt.Print("Gadbad hai baba")
+			errors_package.SetError(err)
+			http.Redirect(w, r, "/error", http.StatusSeeOther)
 		}
-		http.Redirect(w, r, "/home", http.StatusSeeOther)
+		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
 	}
 }

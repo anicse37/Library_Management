@@ -15,7 +15,7 @@ func Router(dns string, SuperAdmin models.User) {
 	defer db.DB.Close()
 	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Minute)
 	defer cancel()
-	// librarySQL.InsertSuperAdmin(ctx, db, SuperAdmin)
+	librarySQL.InsertSuperAdmin(ctx, db, SuperAdmin)
 	router := RouterEndpoints(ctx, db)
 	http.ListenAndServe(":5050", router)
 

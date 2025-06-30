@@ -3,20 +3,21 @@ package librarySQL
 import (
 	"context"
 
+	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	"github.com/anicse37/Library_Management/internal/models"
 )
 
 func InsertBooks(ctx context.Context, db models.Database, book models.Book) error {
 	if _, err := db.DB.ExecContext(ctx, `INSERT INTO books (name, author, description,year,available_no)
 	VALUES (?,?,?,?,?);`, book.Name, book.Author, book.Description, book.Year, book.Available); err != nil {
-		return models.ErrorWhileInserting
+		return errors_package.ErrorWhileInserting
 	}
 	return nil
 }
 func InsertBorrowedBooks(ctx context.Context, db models.Database, book models.Borrowed_Book) error {
 	tx, err := db.DB.BeginTx(ctx, nil)
 	if err != nil {
-		return models.ErrorWhileInserting
+		return errors_package.ErrorWhileInserting
 	}
 
 	_, err = tx.ExecContext(ctx, `
@@ -26,7 +27,7 @@ func InsertBorrowedBooks(ctx context.Context, db models.Database, book models.Bo
 	)
 	if err != nil {
 		tx.Rollback()
-		return models.ErrorWhileInserting
+		return errors_package.ErrorWhileInserting
 	}
 
 	_, err = tx.ExecContext(ctx, `
@@ -37,10 +38,10 @@ func InsertBorrowedBooks(ctx context.Context, db models.Database, book models.Bo
 	)
 	if err != nil {
 		tx.Rollback()
-		return models.ErrorWhileInserting
+		return errors_package.ErrorWhileInserting
 	}
 	if err = tx.Commit(); err != nil {
-		return models.ErrorWhileInserting
+		return errors_package.ErrorWhileInserting
 	}
 	return nil
 }

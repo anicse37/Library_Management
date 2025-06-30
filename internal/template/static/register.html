@@ -1,17 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Register</title>
   <link rel="stylesheet" href="/internal/template/static/css/register.css">
 </head>
+
 <body>
 
   <nav class="navbar">
     <div class="navbar-container">
       <h1 class="logo">Library Management</h1>
       <div class="nav-links">
-        <a href="/">Home</a>
+        {{if eq $.Role "superadmin"}}
+        <a href="/superadmin/dashboard">Home</a>
+        {{end}}
+        {{if eq $.Role "admin"}}
+        <a href="/admin/dashboard">Home</a>
+        {{end}}
+        {{if eq $.Role "user"}}
+        <a href="/home">Home</a>
+        {{end}}
         <a href="/login">Login</a>
       </div>
     </div>
@@ -41,4 +51,5 @@
   </main>
 
 </body>
+
 </html>

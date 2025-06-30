@@ -48,14 +48,17 @@
                     {{.ReturnedDate.Format "2006-01-02"}}
                     {{else}}Not Returned{{end}}
                 </td>
-                {{if or $.Role "user"}}
+                {{if and (eq $.Role "user") (not .ReturnedDate)}}
                 <td>
                     <form method="POST" action="/return_book">
-                        <input type="hidden" name="book_id" value="{{.BookID}}">
-                        <button type="submit" class="return_btn">Remove</button>
+                        <input type="hidden" name="book_id" value="{{.BorrowID}}">
+                        <button type="submit" class="return_btn">Return</button>
                     </form>
                 </td>
+                {{else}}
+                <td></td>
                 {{end}}
+
             </tr>
             {{else}}
             <tr>
