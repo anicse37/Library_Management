@@ -46,7 +46,7 @@ If needed, use a .env file or configure database credentials in the code (variab
 ```bash
 go run main.go
 ```
- - The server should start on localhost:8080
+ - The server should start on localhost:5050
 
 ## 🧪 Development Notes
  - Passwords are securely hashed with bcrypt
