@@ -20,6 +20,12 @@ var (
 
 	ErrorUserAlreadyExist  = errors.New("user already exists")
 	ErrorCanNotRemoveBooks = errors.New("can not remove books")
+	ErrorCanNotBorrowBooks = errors.New("can not borrow books")
 
 	ErrorAdminNotAllowed = errors.New("account not approved by admin")
+
+	ErrorReturningBooks  = errors.New("error returning book")
+	ErrorAlreadyBorrowed = errors.New("error book already borrowed")
+
+	ErrorNoBooksAvailable = errors.New("error no books available")
 )

@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 
-	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	"github.com/anicse37/Library_Management/internal/models"
 	librarySQL "github.com/anicse37/Library_Management/internal/repo"
 )
@@ -32,17 +31,11 @@ func AddBorrowBook(ctx context.Context, db models.Database, book models.Borrowed
 }
 
 func ReturnBorrowedBook(ctx context.Context, db models.Database, book string) error {
-	row, err := db.DB.QueryContext(ctx, `SELECT available_no FROM books WHERE id = ?`, book)
+	_, err := db.DB.QueryContext(ctx, `UPDATE books SET available_no = available_no +1 WHERE id = ?`, book)
 	if err != nil {
 		return err
 	}
-	var avail_no int
-	for row.Next() {
-		row.Scan(&avail_no)
-	}
-	if avail_no <= 0 {
-		return errors_package.ErrorCanNotRemoveBooks
-	}
+
 	err = librarySQL.DeleteBorrowedBook(ctx, db, book)
 	return err
 }

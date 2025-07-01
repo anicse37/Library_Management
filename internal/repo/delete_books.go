@@ -18,7 +18,7 @@ func DeleteBooks(ctx context.Context, db models.Database, id int) error {
 }
 
 func DeleteBorrowedBook(ctx context.Context, db models.Database, id string) error {
-	if _, err := db.DB.ExecContext(ctx, `UPDATE borrowed_books SET returned_date = NOW() WHERE id = ?;`, id); err != nil {
+	if _, err := db.DB.ExecContext(ctx, `UPDATE borrowed_books SET returned_date = NOW() WHERE book_id = ?;`, id); err != nil {
 		return errors_package.ErrorWhileRemoveing
 	}
 	return nil

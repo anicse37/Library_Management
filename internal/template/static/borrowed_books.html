@@ -51,7 +51,7 @@
                 {{if and (eq $.Role "user") (not .ReturnedDate)}}
                 <td>
                     <form method="POST" action="/return_book">
-                        <input type="hidden" name="book_id" value="{{.BorrowID}}">
+                        <input type="hidden" name="book_id" value="{{.BookID}}">
                         <button type="submit" class="return_btn">Return</button>
                     </form>
                 </td>
