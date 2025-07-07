@@ -53,7 +53,14 @@ func BooksHandle(ctx context.Context, db models.Database) http.HandlerFunc {
 func AddBooksHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			template.RenderTemplate(w, "add_books.html", nil)
+			session, _ := session.Store.Get(r, "very-secret-key")
+			role := session.Values[models.SessionKeyRole].(string)
+			data := struct {
+				Role string
+			}{
+				Role: role,
+			}
+			template.RenderTemplate(w, "add_books.html", data)
 			return
 		}
 		r.ParseForm()

@@ -16,13 +16,13 @@ func AdminDashboard(ctx context.Context, db models.Database) http.HandlerFunc {
 		userID, ok := session.Values[models.SessionKeyUserId].(string)
 		userRole, ok2 := session.Values[models.SessionKeyRole].(string)
 		if !ok || !ok2 || userID == "" || userRole != "admin" {
-			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusSeeOther)
+			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusUnauthorized)
 			return
 		}
 
 		user, err := queries.GetAdminWithId(ctx, db, userID)
 		if err != nil || !user.Approved || user.Role != "admin" {
-			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusSeeOther)
+			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusUnauthorized)
 			return
 		}
 		data := struct {

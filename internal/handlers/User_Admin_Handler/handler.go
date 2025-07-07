@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 
-	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	session "github.com/anicse37/Library_Management/internal/middleware"
 	"github.com/anicse37/Library_Management/internal/models"
 	"github.com/anicse37/Library_Management/internal/search"
@@ -98,22 +97,5 @@ func RemoveUserHandler(ctx context.Context, db models.Database) http.HandlerFunc
 		user := r.FormValue("user_id")
 		queries.RemoveUser(ctx, db, user)
 		http.Redirect(w, r, "/all_users", http.StatusSeeOther)
-	}
-}
-
-func ErrorHandler(ctx context.Context, db models.Database) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		err := errors_package.GetError()
-		session, _ := session.Store.Get(r, "very-secret-key")
-		role, _ := session.Values[models.SessionKeyRole].(string)
-
-		data := struct {
-			Message string
-			Role    string
-		}{
-			Message: err.Error(),
-			Role:    role,
-		}
-		template.RenderTemplate(w, "error.html", data)
 	}
 }

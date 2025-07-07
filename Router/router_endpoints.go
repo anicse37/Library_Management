@@ -43,7 +43,5 @@ func RouterEndpoints(ctx context.Context, db models.Database) *http.ServeMux {
 	router.HandleFunc("/admin/dashboard", handler.RequireLogin(handler.RequireRole("admin", dashboard.AdminDashboard(ctx, db))))
 	router.HandleFunc("/superadmin/dashboard", handler.RequireLogin(handler.RequireRole("superadmin", dashboard.SuperAdminDashboard(ctx, db))))
 
-	router.HandleFunc("/error", handler.ErrorHandler(ctx, db))
-
 	return router
 }

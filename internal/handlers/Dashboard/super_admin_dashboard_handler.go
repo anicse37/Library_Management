@@ -18,13 +18,13 @@ func SuperAdminDashboard(ctx context.Context, db models.Database) http.HandlerFu
 		userRole, ok2 := session.Values[models.SessionKeyRole].(string)
 
 		if !ok || !ok2 || userID == "" || userRole != "superadmin" {
-			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusSeeOther)
+			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusUnauthorized)
 			return
 		}
 
 		user, err := queries.GetAdminWithId(ctx, db, userID)
 		if err != nil || !user.Approved || user.Role != "superadmin" {
-			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusSeeOther)
+			http.Redirect(w, r, "/login?msg=unauthorized_access", http.StatusUnauthorized)
 			return
 		}
 
