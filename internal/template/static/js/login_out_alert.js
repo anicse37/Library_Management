@@ -41,4 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
             text: 'Admin Not Approved by Super Admin.',
         });
     }
+     if (msg === "register_failed") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            text: 'User already exists. Please try again.',
+        });
+    }
 });
