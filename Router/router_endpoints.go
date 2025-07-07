@@ -15,8 +15,10 @@ import (
 func RouterEndpoints(ctx context.Context, db models.Database) *http.ServeMux {
 	router := http.NewServeMux()
 
-	fs := http.FileServer(http.Dir("internal/template/static/css"))
-	router.Handle("/internal/template/static/css/", http.StripPrefix("/internal/template/static/css/", fs))
+	fs_css := http.FileServer(http.Dir("internal/template/static/css"))
+	fs_js := http.FileServer(http.Dir("internal/template/static/js"))
+	router.Handle("/internal/template/static/css/", http.StripPrefix("/internal/template/static/css/", fs_css))
+	router.Handle("/internal/template/static/js/", http.StripPrefix("/internal/template/static/js/", fs_js))
 
 	router.HandleFunc("/register", authentication.RegisterHandler(ctx, db))
 	router.HandleFunc("/login", authentication.LoginHandler(ctx, db))

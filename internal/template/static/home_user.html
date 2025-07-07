@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>User Home</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/internal/template/static/css/home_user.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/internal/template/static/js/login.js"></script>
 </head>
+
 <body>
 
   <nav class="navbar">
@@ -21,7 +25,7 @@
   <main class="card">
     <h1>Welcome, {{.User.Name}}!</h1>
     <p>Your ID: {{.User.Id}}<br>
-       Role: {{.User.Role}}</p>
+      Role: {{.User.Role}}</p>
 
     <div class="buttons">
       <a href="/books" class="btn">📚 View All Books</a>
@@ -31,4 +35,5 @@
   </main>
 
 </body>
+
 </html>

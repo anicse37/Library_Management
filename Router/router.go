@@ -18,5 +18,4 @@ func Router(dns string, SuperAdmin models.User) {
 	librarySQL.InsertSuperAdmin(ctx, db, SuperAdmin)
 	router := RouterEndpoints(ctx, db)
 	http.ListenAndServe(":5050", router)
-
 }
