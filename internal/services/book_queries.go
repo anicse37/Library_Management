@@ -39,9 +39,12 @@ func ReturnBorrowedBook(ctx context.Context, db models.Database, book string) er
 	err = librarySQL.DeleteBorrowedBook(ctx, db, book)
 	return err
 }
-func BorrowedBooks(ctx context.Context, db models.Database, user_id string) models.ListBorrowedBookDisplay {
+func BorrowedBooks(ctx context.Context, db models.Database, user_id string) (models.ListBorrowedBookDisplay, error) {
 	var books models.ListBorrowedBookDisplay
-	result, _ := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE user_id = ? ORDER BY returned_date IS NULL,borrow_date;", user_id)
+	result, err := db.DB.QueryContext(ctx, "SELECT * FROM borrowed_books WHERE user_id = ? ORDER BY returned_date IS NULL,borrow_date;", user_id)
+	if err != nil {
+		return books, err
+	}
 	book := models.BorrowedBookDisplay{}
 	for result.Next() {
 		result.Scan(&book.BorrowID, &book.UserId, &book.BookID, &book.BorrowDate, &book.ReturnedDate)
@@ -49,5 +52,5 @@ func BorrowedBooks(ctx context.Context, db models.Database, user_id string) mode
 		result2.Scan(&book.BookName, &book.Author)
 		books = append(books, book)
 	}
-	return books
+	return books, nil
 }

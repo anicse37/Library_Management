@@ -75,7 +75,10 @@ func BorrowedBooksHandler(ctx context.Context, db models.Database) http.HandlerF
 		user_id, _ := session.Values[models.SessionKeyUserId].(string)
 		role, _ := session.Values[models.SessionKeyRole].(string)
 
-		books := queries.BorrowedBooks(ctx, db, user_id)
+		books, err := queries.BorrowedBooks(ctx, db, user_id)
+		if err != nil {
+			http.Redirect(w, r, "/books?msg=error_in_borrowed_books", http.StatusSeeOther)
+		}
 
 		data := struct {
 			Book models.ListBorrowedBookDisplay
@@ -95,8 +98,7 @@ func ReturnBookHandler(ctx context.Context, db models.Database) http.HandlerFunc
 		fmt.Println(book)
 		err := queries.ReturnBorrowedBook(ctx, db, book)
 		if err != nil {
-			errors_package.SetError(err)
-			http.Redirect(w, r, "/error", http.StatusSeeOther)
+			http.Redirect(w, r, "/your_books?msg=return_error", http.StatusSeeOther)
 		}
 		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
 	}
