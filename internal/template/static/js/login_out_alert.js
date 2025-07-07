@@ -48,4 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
             text: 'User already exists. Please try again.',
         });
     }
+      if (msg) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("msg");
+        window.history.replaceState({}, document.title, url.toString());
+    }
 });

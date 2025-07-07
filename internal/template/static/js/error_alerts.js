@@ -19,11 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-      if (msg === "error_in_borrowed_books") {
+    if (msg === "error_in_borrowed_books") {
         Swal.fire({
             icon: 'error',
             title: 'Can get books',
             text: 'Error Getting Books',
         });
+    }
+    if (msg) {
+        const url = new URL(window.location.href);
+        url.searchParams.delete("msg");
+        window.history.replaceState({}, document.title, url.toString());
     }
 });
