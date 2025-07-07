@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	errors_package "github.com/anicse37/Library_Management/internal/errors"
 	session "github.com/anicse37/Library_Management/internal/middleware"
 	"github.com/anicse37/Library_Management/internal/models"
 	queries "github.com/anicse37/Library_Management/internal/services"
@@ -24,8 +23,7 @@ func BorrowedBooksHandle(ctx context.Context, db models.Database) http.HandlerFu
 
 			books, err := queries.GetAllBorrowedBooks(ctx, db, userid)
 			if err != nil {
-				errors_package.SetError(err)
-				http.Redirect(w, r, "/error", http.StatusSeeOther)
+				http.Redirect(w, r, "/books?msg=error_in_borrowed_books", http.StatusSeeOther)
 			}
 
 			role := "user"
@@ -61,8 +59,7 @@ func BorrowHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 		}
 		err := queries.AddBorrowBook(ctx, db, book)
 		if err != nil {
-			errors_package.SetError(err)
-			http.Redirect(w, r, "/error", http.StatusSeeOther)
+			http.Redirect(w, r, "/books?msg=error_in_borrowed_books", http.StatusSeeOther)
 		}
 		http.Redirect(w, r, "/your_books", http.StatusSeeOther)
 		BorrowedBooksHandler(ctx, db)

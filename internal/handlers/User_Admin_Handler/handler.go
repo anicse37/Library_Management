@@ -23,14 +23,12 @@ func AllUsersHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 			if searchQuerry != "" {
 				users, err = search.SearchUsers(ctx, db, "admin", searchQuerry)
 				if err != nil {
-					errors_package.SetError(err)
-					http.Redirect(w, r, "/error", http.StatusSeeOther)
+					http.Redirect(w, r, "/all_users?msg=user_not_exist", http.StatusSeeOther)
 				}
 			} else {
 				users, err = queries.GetAllUsers(ctx, db)
 				if err != nil {
-					errors_package.SetError(err)
-					http.Redirect(w, r, "/error", http.StatusSeeOther)
+					http.Redirect(w, r, "/all_users?msg=user_not_exist", http.StatusSeeOther)
 				}
 			}
 			role := "user"
