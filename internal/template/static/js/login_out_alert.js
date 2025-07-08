@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (msg === "admin_not_approved") {
         Swal.fire({
             icon: 'error',
-            title: 'Approved',
+            title: 'Not Approved',
             text: 'Admin Not Approved by Super Admin.',
         });
     }

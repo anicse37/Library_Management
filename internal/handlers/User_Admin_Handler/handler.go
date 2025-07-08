@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	session "github.com/anicse37/Library_Management/internal/middleware"
@@ -78,7 +77,6 @@ func ApproveHandler(ctx context.Context, db models.Database) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		admin := r.FormValue("admin_id")
-		fmt.Println(admin)
 		queries.ApproveAdmin(ctx, db, admin)
 		http.Redirect(w, r, "/manage_admins", http.StatusSeeOther)
 	}

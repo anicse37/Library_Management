@@ -2,7 +2,6 @@ package books
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -92,7 +91,6 @@ func ReturnBookHandler(ctx context.Context, db models.Database) http.HandlerFunc
 	return func(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		book := r.FormValue("book_id")
-		fmt.Println(book)
 		err := queries.ReturnBorrowedBook(ctx, db, book)
 		if err != nil {
 			http.Redirect(w, r, "/your_books?msg=return_error", http.StatusSeeOther)
